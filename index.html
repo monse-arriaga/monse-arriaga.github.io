@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[Tu Nombre] — Perfil académico</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --night:    #20233b;
+  --night-2:  #2b3056;
+  --paper:    #f3f2f7;
+  --card:     #ffffff;
+  --ink:      #23263a;
+  --muted:    #6c7088;
+  --soft:     #c9cbe0;
+  --accent:   #e6a07a;
+  --accent-2: #b6a6d6;
+  --line:     #e4e3ee;
+  --line-d:   #3a3f63;
+  --sidebar-w: 340px;
+}
+
+*{ box-sizing:border-box; margin:0; padding:0; }
+html{ scroll-behavior:smooth; }
+body{
+  font-family:'Inter', system-ui, sans-serif;
+  background:var(--paper);
+  color:var(--ink);
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+}
+a{ color:inherit; }
+
+/* ===================== BARRA LATERAL ===================== */
+.sidebar{
+  position:fixed; top:0; left:0;
+  width:var(--sidebar-w); height:100vh;
+  background:radial-gradient(120% 80% at 20% 0%, var(--night-2) 0%, var(--night) 55%);
+  color:#fff;
+  display:flex; flex-direction:column;
+  padding:42px 34px;
+  overflow:hidden;
+}
+.brand .eyebrow{
+  font-family:'Space Mono', monospace;
+  font-size:11px; letter-spacing:.22em; text-transform:uppercase;
+  color:var(--accent);
+}
+.brand h1{
+  font-family:'Fraunces', serif; font-weight:600;
+  font-size:32px; line-height:1.1; margin:10px 0 6px;
+}
+.brand .role{ font-size:14px; color:var(--soft); }
+
+.nav-wrap{
+  position:relative; flex:1;
+  display:flex; align-items:center;
+  margin:30px 0;
+}
+/* la chinchilla vive aquí y se desliza a la opción activa */
+.chin-holder{
+  position:absolute; left:-4px; top:0;
+  width:140px; height:150px;
+  z-index:1; pointer-events:none;
+  transition:transform .55s cubic-bezier(.22,1,.36,1);
+  will-change:transform;
+}
+.chin-holder svg{ width:100%; height:100%; overflow:visible; }
+
+.nav{
+  position:relative; z-index:2;
+  list-style:none; width:100%;
+  padding-left:120px;
+  display:flex; flex-direction:column; gap:6px;
+}
+.nav a{
+  display:block; font-size:16px; font-weight:500;
+  color:var(--soft); text-decoration:none; padding:8px 0;
+  transition:color .25s, transform .25s;
+}
+.nav a .dot{
+  display:inline-block; width:7px; height:7px; border-radius:50%;
+  background:var(--line-d); margin-right:12px; vertical-align:middle;
+  transition:background .25s, transform .25s;
+}
+.nav a:hover, .nav a:focus-visible, .nav a.active{
+  color:#fff; transform:translateX(4px); outline:none;
+}
+.nav a:hover .dot, .nav a:focus-visible .dot, .nav a.active .dot{
+  background:var(--accent); transform:scale(1.5);
+}
+
+.social{
+  display:flex; flex-wrap:wrap; gap:8px 18px;
+  font-family:'Space Mono', monospace; font-size:12px; letter-spacing:.04em;
+}
+.social a{
+  color:var(--soft); text-decoration:none;
+  border-bottom:1px solid transparent;
+  transition:color .2s, border-color .2s;
+}
+.social a:hover{ color:var(--accent); border-color:var(--accent); }
+
+/* ===================== CONTENIDO ===================== */
+.content{ margin-left:var(--sidebar-w); max-width:760px; padding:0 56px; }
+section{ padding:96px 0; border-bottom:1px solid var(--line); }
+section:last-child{ border-bottom:none; }
+
+.eyebrow{
+  font-family:'Space Mono', monospace; font-size:12px;
+  letter-spacing:.2em; text-transform:uppercase;
+  color:var(--accent); margin-bottom:18px;
+}
+
+#inicio{ padding-top:120px; }
+#inicio h2{
+  font-family:'Fraunces', serif; font-weight:600;
+  font-size:clamp(34px, 5vw, 52px); line-height:1.08;
+  letter-spacing:-0.01em; margin-bottom:24px;
+}
+#inicio h2 .hl{ color:var(--accent); font-style:italic; }
+.lead{ font-size:19px; color:var(--ink); max-width:60ch; }
+.lead + .lead{ margin-top:18px; color:var(--muted); font-size:17px; }
+
+h3{ font-family:'Fraunces', serif; font-weight:600; font-size:30px; margin-bottom:22px; }
+.prose p{ color:var(--muted); margin-bottom:16px; max-width:62ch; }
+.chips{ display:flex; flex-wrap:wrap; gap:10px; margin-top:24px; }
+.chip{
+  font-size:13px; font-weight:500; padding:7px 15px; border-radius:100px;
+  background:#fff; border:1px solid var(--line); color:var(--ink);
+}
+.chip::before{ content:'•'; color:var(--accent-2); margin-right:8px; }
+
+.cv-card{
+  background:var(--card); border:1px solid var(--line); border-radius:18px;
+  padding:30px 32px; display:flex; align-items:center; justify-content:space-between;
+  gap:24px; flex-wrap:wrap;
+}
+.cv-card .meta{ font-family:'Space Mono', monospace; font-size:12px; color:var(--muted); }
+.cv-card .meta strong{ color:var(--ink); font-weight:700; }
+.btn{
+  display:inline-flex; align-items:center; gap:10px;
+  background:var(--accent); color:#2a1c12; font-weight:600; font-size:15px;
+  text-decoration:none; padding:14px 26px; border-radius:100px;
+  transition:transform .2s, box-shadow .2s, background .2s;
+  box-shadow:0 6px 20px -8px rgba(230,160,122,.8);
+}
+.btn:hover{ transform:translateY(-2px); background:#eaad8c; box-shadow:0 12px 26px -10px rgba(230,160,122,.9); }
+.btn svg{ width:18px; height:18px; }
+
+.timeline{ position:relative; margin-top:10px; padding-left:30px; }
+.timeline::before{
+  content:''; position:absolute; left:6px; top:8px; bottom:8px; width:2px;
+  background:linear-gradient(var(--accent), var(--accent-2));
+}
+.event{ position:relative; padding-bottom:34px; }
+.event:last-child{ padding-bottom:0; }
+.event::before{
+  content:''; position:absolute; left:-30px; top:5px;
+  width:14px; height:14px; border-radius:50%;
+  background:var(--paper); border:3px solid var(--accent);
+}
+.event .when{
+  font-family:'Space Mono', monospace; font-size:12px; letter-spacing:.05em;
+  color:var(--accent-2); font-weight:700;
+}
+.event h4{ font-family:'Fraunces', serif; font-weight:600; font-size:19px; margin:4px 0 6px; }
+.event p{ color:var(--muted); font-size:15px; max-width:58ch; }
+
+.contact-links{ display:flex; flex-direction:column; gap:4px; }
+.contact-links a{
+  font-family:'Fraunces', serif; font-size:22px; text-decoration:none;
+  color:var(--ink); width:fit-content;
+  border-bottom:2px solid transparent; transition:border-color .2s, color .2s;
+}
+.contact-links a:hover{ color:var(--accent); border-color:var(--accent); }
+.foot{ margin-top:40px; font-family:'Space Mono', monospace; font-size:11px; color:var(--muted); }
+
+.reveal{ opacity:0; transform:translateY(24px); transition:opacity .7s ease, transform .7s ease; }
+.reveal.in{ opacity:1; transform:none; }
+
+/* ===================== ANIMACIONES DE LA CHINCHILLA ===================== */
+#chin-bob{ transform-box:fill-box; transform-origin:50% 100%; animation:bob 4s ease-in-out infinite; }
+@keyframes bob{ 0%,100%{ transform:translateY(0) rotate(0deg); } 50%{ transform:translateY(-5px) rotate(-1deg); } }
+
+.ear{ transform-box:fill-box; transform-origin:50% 90%; }
+.ear-l{ animation:wiggleL 5s ease-in-out infinite; }
+.ear-r{ animation:wiggleR 5s ease-in-out infinite .4s; }
+@keyframes wiggleL{ 0%,88%,100%{ transform:rotate(0deg);} 92%{ transform:rotate(-9deg);} 96%{ transform:rotate(4deg);} }
+@keyframes wiggleR{ 0%,90%,100%{ transform:rotate(0deg);} 94%{ transform:rotate(9deg);} 98%{ transform:rotate(-4deg);} }
+
+#tail{ transform-box:fill-box; transform-origin:80% 90%; animation:sway 3.5s ease-in-out infinite; }
+@keyframes sway{ 0%,100%{ transform:rotate(-4deg);} 50%{ transform:rotate(6deg);} }
+
+#eyes{ transform-box:fill-box; transform-origin:50% 50%; transition:transform .09s ease; }
+#eyes.blink{ transform:scaleY(.08); }
+
+#arm-l{ transform-box:fill-box; transform-origin:60% 0%; animation:armL 4s ease-in-out infinite; }
+#arm-r{ transform-box:fill-box; transform-origin:40% 0%; animation:armR 4s ease-in-out infinite .3s; }
+@keyframes armL{ 0%,100%{ transform:rotate(0deg);} 50%{ transform:rotate(5deg);} }
+@keyframes armR{ 0%,100%{ transform:rotate(0deg);} 50%{ transform:rotate(-5deg);} }
+
+/* ----- reacción al alimentarla ----- */
+#chin-react{ transform-box:fill-box; transform-origin:50% 60%; }
+#chin-react.happy{ animation:chomp .6s ease; }
+@keyframes chomp{
+  0%{transform:scale(1,1);} 20%{transform:scale(1.08,.92);}
+  45%{transform:scale(.95,1.06);} 70%{transform:scale(1.05,.96);} 100%{transform:scale(1,1);}
+}
+.happy-eye{ opacity:0; }
+#eyes.hide{ opacity:0; }
+#chin-react.happy .happy-eye{ opacity:1; }
+
+/* botón "dale una croqueta" */
+.treat{
+  display:inline-flex; align-items:center; gap:9px;
+  background:none; border:1px dashed var(--line-d); color:var(--soft);
+  font-family:'Space Mono', monospace; font-size:12px; letter-spacing:.03em;
+  padding:9px 15px; border-radius:100px; cursor:pointer;
+  margin-bottom:18px; transition:border-color .2s, color .2s, transform .12s;
+}
+.treat:hover{ border-color:var(--accent); color:#fff; }
+.treat:active{ transform:scale(.95); }
+.treat .count{ color:var(--accent); font-weight:700; }
+
+/* croqueta voladora y corazoncitos */
+.kibble-fly{
+  position:fixed; width:22px; height:22px; z-index:60; pointer-events:none;
+  transition:transform .6s cubic-bezier(.45,-0.25,.5,1), opacity .2s;
+}
+.heart-pop{
+  position:fixed; z-index:60; pointer-events:none; width:16px; height:16px;
+  animation:floatUp 1s ease-out forwards;
+}
+@keyframes floatUp{
+  0%{ opacity:1; transform:translateY(0) scale(.5); }
+  100%{ opacity:0; transform:translateY(-48px) scale(1.1); }
+}
+
+/* ===================== RESPONSIVE ===================== */
+@media (max-width: 880px){
+  :root{ --sidebar-w:0px; }
+  .sidebar{ position:relative; width:100%; height:auto; flex-direction:column; padding:30px 24px; }
+  .nav-wrap{ margin:18px 0 4px; flex-direction:column; align-items:center; }
+  .chin-holder{
+    position:relative; left:auto; top:auto;
+    width:130px; height:140px; margin-bottom:8px;
+    transform:none !important;
+  }
+  .nav{ padding-left:0; flex-direction:row; flex-wrap:wrap; justify-content:center; gap:4px 22px; }
+  .content{ margin-left:0; padding:0 24px; max-width:none; }
+  #inicio{ padding-top:60px; }
+  section{ padding:64px 0; }
+}
+@media (prefers-reduced-motion: reduce){
+  html{ scroll-behavior:auto; }
+  .reveal{ transition:none; opacity:1; transform:none; }
+  #chin-bob, .ear-l, .ear-r, #tail, #arm-l, #arm-r{ animation:none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ================= BARRA LATERAL ================= -->
+<aside class="sidebar">
+  <div class="brand">
+    <div class="eyebrow">Perfil académico</div>
+    <h1>[Tu Nombre<br>Apellido]</h1>
+    <div class="role">[Doctorando en Ciencias de la Computación · Universidad X]</div>
+  </div>
+
+  <div class="nav-wrap">
+    <!-- ====== CHINCHILLA SVG (original) ====== -->
+    <div class="chin-holder" aria-hidden="true">
+      <svg viewBox="0 0 180 210" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="fur" cx="38%" cy="32%" r="80%">
+            <stop offset="0%" stop-color="#c2c8db"/>
+            <stop offset="60%" stop-color="#a6adc4"/>
+            <stop offset="100%" stop-color="#8b93ad"/>
+          </radialGradient>
+          <radialGradient id="belly" cx="50%" cy="35%" r="75%">
+            <stop offset="0%" stop-color="#f3f1f7"/>
+            <stop offset="100%" stop-color="#ddd9e8"/>
+          </radialGradient>
+        </defs>
+
+        <g id="chin-lean">
+          <g id="chin-bob">
+          <g id="chin-react">
+            <!-- sombra -->
+            <ellipse cx="90" cy="197" rx="44" ry="7" fill="#171526" opacity="0.12"/>
+
+            <!-- cola esponjada -->
+            <g id="tail">
+              <circle cx="46" cy="158" r="16" fill="#9aa1ba"/>
+              <circle cx="37" cy="138" r="14" fill="#a6adc4"/>
+              <circle cx="40" cy="118" r="11" fill="#b3b9cf"/>
+            </g>
+
+            <!-- cuerpo -->
+            <ellipse cx="90" cy="142" rx="48" ry="50" fill="url(#fur)"/>
+            <!-- patitas -->
+            <ellipse cx="73" cy="184" rx="13" ry="8" fill="#9aa1ba"/>
+            <ellipse cx="107" cy="184" rx="13" ry="8" fill="#9aa1ba"/>
+            <!-- pancita -->
+            <ellipse cx="90" cy="150" rx="28" ry="34" fill="url(#belly)"/>
+            <!-- bracitos -->
+            <g id="arm-l"><ellipse cx="63" cy="150" rx="8" ry="13" fill="#9fa6bd"/></g>
+            <g id="arm-r"><ellipse cx="117" cy="150" rx="8" ry="13" fill="#9fa6bd"/></g>
+
+            <!-- orejas -->
+            <g class="ear ear-l">
+              <ellipse cx="63" cy="44" rx="15" ry="20" fill="#9fa6bd" transform="rotate(-12 63 44)"/>
+              <ellipse cx="64" cy="46" rx="8" ry="12" fill="#e3a6ae" transform="rotate(-12 64 46)"/>
+            </g>
+            <g class="ear ear-r">
+              <ellipse cx="117" cy="44" rx="15" ry="20" fill="#9fa6bd" transform="rotate(12 117 44)"/>
+              <ellipse cx="116" cy="46" rx="8" ry="12" fill="#e3a6ae" transform="rotate(12 116 46)"/>
+            </g>
+
+            <!-- cabeza -->
+            <circle cx="90" cy="78" r="46" fill="url(#fur)"/>
+
+            <!-- mejillas -->
+            <ellipse cx="62" cy="92" rx="9" ry="5.5" fill="#e3a6ae" opacity="0.55"/>
+            <ellipse cx="118" cy="92" rx="9" ry="5.5" fill="#e3a6ae" opacity="0.55"/>
+
+            <!-- ojos (parpadean) -->
+            <g id="eyes">
+              <ellipse id="scleraL" cx="73" cy="76" rx="11" ry="13" fill="#fff"/>
+              <ellipse id="scleraR" cx="107" cy="76" rx="11" ry="13" fill="#fff"/>
+              <g id="pupilL">
+                <circle cx="73" cy="78" r="6.5" fill="#171526"/>
+                <circle cx="75.4" cy="75" r="2.1" fill="#fff"/>
+              </g>
+              <g id="pupilR">
+                <circle cx="107" cy="78" r="6.5" fill="#171526"/>
+                <circle cx="109.4" cy="75" r="2.1" fill="#fff"/>
+              </g>
+            </g>
+
+            <!-- ojos felices (al comer) -->
+            <path class="happy-eye" d="M64 75 q9 9 18 0" stroke="#171526" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <path class="happy-eye" d="M98 75 q9 9 18 0" stroke="#171526" stroke-width="3" fill="none" stroke-linecap="round"/>
+
+            <!-- nariz y boca -->
+            <ellipse id="nose" cx="90" cy="93" rx="4" ry="3" fill="#d98e98"/>
+            <path d="M90 96 q-4 5 -8 2 M90 96 q4 5 8 2" stroke="#7d6470" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+
+            <!-- bigotes -->
+            <g stroke="#ffffff" stroke-width="1.3" opacity="0.7" stroke-linecap="round">
+              <line x1="84" y1="94" x2="52" y2="90"/>
+              <line x1="84" y1="97" x2="52" y2="99"/>
+              <line x1="96" y1="94" x2="128" y2="90"/>
+              <line x1="96" y1="97" x2="128" y2="99"/>
+            </g>
+          </g>
+          </g>
+        </g>
+      </svg>
+    </div>
+
+    <ul class="nav">
+      <li><a href="#inicio" class="active"><span class="dot"></span>Inicio</a></li>
+      <li><a href="#sobre"><span class="dot"></span>Sobre mí</a></li>
+      <li><a href="#cv"><span class="dot"></span>CV</a></li>
+      <li><a href="#cronograma"><span class="dot"></span>Cronograma</a></li>
+      <li><a href="#contacto"><span class="dot"></span>Contacto</a></li>
+    </ul>
+  </div>
+
+  <button class="treat" id="treatBtn" aria-label="Dar una croqueta a la chinchilla">
+    <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5.5 6 5.5c2 0 3.2 1.2 4 2.3.8-1.1 2-2.3 4-2.3 3.5 0 5 3.5 3.5 6.5C19 16.5 12 21 12 21z" fill="#b9824f"/></svg>
+    Dale una croqueta · <span class="count" id="treatCount">0</span>
+  </button>
+
+  <div class="social">
+    <a href="mailto:tucorreo@universidad.edu">Email</a>
+    <a href="https://github.com/tuusuario" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://orcid.org/0000-0000-0000-0000" target="_blank" rel="noopener">ORCID</a>
+    <a href="https://scholar.google.com/" target="_blank" rel="noopener">Scholar</a>
+  </div>
+</aside>
+
+<!-- ================= CONTENIDO ================= -->
+<main class="content">
+
+  <section id="inicio">
+    <div class="eyebrow reveal">Hola 👋</div>
+    <h2 class="reveal">Soy [Tu Nombre], y estudio <span class="hl">[tu área de investigación]</span>.</h2>
+    <p class="lead reveal">Me interesa cómo [pregunta o problema central que te motiva]. Trabajo en la intersección de [campo 1] y [campo 2], con un enfoque en [método o tema concreto].</p>
+    <p class="lead reveal">Actualmente soy [tu posición] en [institución], donde investigo [línea de trabajo] bajo la supervisión de [nombre, opcional].</p>
+  </section>
+
+  <section id="sobre">
+    <div class="eyebrow reveal">01 — Sobre mí</div>
+    <h3 class="reveal">Un poco de contexto</h3>
+    <div class="prose reveal">
+      <p>[Aquí va un párrafo breve sobre tu trayectoria: de dónde vienes académicamente, qué te llevó a tu área y qué tipo de problemas disfrutas resolver. Mantenlo personal pero conciso, 3 o 4 líneas.]</p>
+      <p>[Un segundo párrafo opcional: tu enfoque, tus valores como investigador/a, o lo que buscas a futuro. Puedes mencionar colaboraciones, docencia o divulgación si aplica.]</p>
+    </div>
+    <div class="chips reveal">
+      <span class="chip">[Interés 1]</span>
+      <span class="chip">[Interés 2]</span>
+      <span class="chip">[Interés 3]</span>
+      <span class="chip">[Método / herramienta]</span>
+    </div>
+  </section>
+
+  <section id="cv">
+    <div class="eyebrow reveal">02 — Currículum</div>
+    <h3 class="reveal">Descarga mi CV</h3>
+    <p class="prose reveal" style="color:var(--muted);max-width:58ch;margin-bottom:26px;">
+      Versión completa con publicaciones, formación, experiencia y referencias.
+    </p>
+    <div class="cv-card reveal">
+      <div class="meta">Formato PDF · <strong>~200 KB</strong><br>Última actualización: [mes año]</div>
+      <a class="btn" href="cv.pdf" download>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/></svg>
+        Descargar CV
+      </a>
+    </div>
+  </section>
+
+  <section id="cronograma">
+    <div class="eyebrow reveal">03 — Cronograma</div>
+    <h3 class="reveal">Lo que he hecho recientemente</h3>
+    <div class="timeline">
+      <div class="event reveal">
+        <div class="when">2026 · Marzo</div>
+        <h4>[Publicación / artículo]</h4>
+        <p>Publiqué «[Título del artículo]» en [conferencia o revista]. [Una línea sobre de qué trata o por qué importa.]</p>
+      </div>
+      <div class="event reveal">
+        <div class="when">2025 · Noviembre</div>
+        <h4>[Presentación en congreso]</h4>
+        <p>Presenté [tema/poster/charla] en [nombre del evento], [ciudad o modalidad].</p>
+      </div>
+      <div class="event reveal">
+        <div class="when">2025 · Junio</div>
+        <h4>[Beca / premio / reconocimiento]</h4>
+        <p>Recibí [nombre de la beca o premio] otorgado por [institución].</p>
+      </div>
+      <div class="event reveal">
+        <div class="when">2024 · Septiembre</div>
+        <h4>[Inicio de programa o proyecto]</h4>
+        <p>Comencé [doctorado / proyecto de investigación] sobre [tema] en [institución].</p>
+      </div>
+      <div class="event reveal">
+        <div class="when">2024 · Enero</div>
+        <h4>[Hito anterior]</h4>
+        <p>[Describe brevemente: titulación, colaboración, estancia, etc.]</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="contacto">
+    <div class="eyebrow reveal">04 — Contacto</div>
+    <h3 class="reveal">Hablemos</h3>
+    <div class="contact-links reveal">
+      <a href="mailto:tucorreo@universidad.edu">tucorreo@universidad.edu</a>
+      <a href="https://github.com/tuusuario" target="_blank" rel="noopener">github.com/tuusuario</a>
+      <a href="https://scholar.google.com/" target="_blank" rel="noopener">Google Scholar</a>
+    </div>
+    <div class="foot">© 2026 [Tu Nombre] · Hecho con 🐭 y GitHub Pages</div>
+  </section>
+
+</main>
+
+<script>
+(function(){
+  const holder   = document.querySelector('.chin-holder');
+  const navWrap  = document.querySelector('.nav-wrap');
+  const links    = Array.from(document.querySelectorAll('.nav a'));
+  const lean     = document.getElementById('chin-lean');
+  const eyes     = document.getElementById('eyes');
+  const pupilL   = document.getElementById('pupilL');
+  const pupilR   = document.getElementById('pupilR');
+  const scleraL  = document.getElementById('scleraL');
+  const scleraR  = document.getElementById('scleraR');
+  const svgEl    = holder.querySelector('svg');
+  const reduce   = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ---------- 1) navegación: SIEMPRE hace scroll dentro de la página ----------
+  links.forEach(link=>{
+    link.addEventListener('click', e=>{
+      const id = link.getAttribute('href');
+      const target = document.querySelector(id);
+      if(target){
+        e.preventDefault();
+        target.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block:'start' });
+        history.replaceState(null, '', id);
+      }
+    });
+  });
+
+  // ---------- 2) la chinchilla se desliza hasta la opción activa/hover ----------
+  let activeIndex = 0, hoverIndex = -1;
+  const isMobile = () => window.innerWidth <= 880;
+
+  function placeChin(){
+    if(isMobile()){ holder.style.transform = ''; return; }
+    const i = hoverIndex >= 0 ? hoverIndex : activeIndex;
+    const wrapRect = navWrap.getBoundingClientRect();
+    const lr = links[i].getBoundingClientRect();
+    const centerPx = (lr.top + lr.height/2) - wrapRect.top;
+    const y = centerPx - holder.offsetHeight/2;   // centra la chinchilla en la opción
+    holder.style.transform = 'translateY(' + y + 'px)';
+  }
+  links.forEach((link, i)=>{
+    link.addEventListener('mouseenter', ()=>{ hoverIndex = i; placeChin(); });
+    link.addEventListener('mouseleave', ()=>{ hoverIndex = -1; placeChin(); });
+    link.addEventListener('focus',      ()=>{ hoverIndex = i; placeChin(); });
+    link.addEventListener('blur',       ()=>{ hoverIndex = -1; placeChin(); });
+  });
+
+  // scrollspy: marca la sección visible y la chinchilla la sigue
+  const sections = links.map(l=> document.querySelector(l.getAttribute('href')));
+  const spy = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        const idx = sections.indexOf(e.target);
+        if(idx>=0){
+          activeIndex = idx;
+          links.forEach(l=> l.classList.remove('active'));
+          links[idx].classList.add('active');
+          placeChin();
+        }
+      }
+    });
+  }, { rootMargin:'-45% 0px -45% 0px', threshold:0 });
+  sections.forEach(s=> s && spy.observe(s));
+
+  // ---------- 3) ojos + cuerpo siguiendo el cursor ----------
+  let px = window.innerWidth*0.5, py = window.innerHeight*0.4;
+  let curLX=0, curLY=0, curRX=0, curRY=0, curLean=0;
+  const MAX = 3.4;            // cuánto se mueven las pupilas (unidades SVG)
+
+  window.addEventListener('mousemove', e=>{ px = e.clientX; py = e.clientY; });
+
+  function pupilOffset(scleraEl){
+    const r = scleraEl.getBoundingClientRect();
+    const cx = r.left + r.width/2;
+    const cy = r.top + r.height/2;
+    const ang = Math.atan2(py - cy, px - cx);
+    const d = Math.min(1, Math.hypot(px-cx, py-cy)/220);
+    return { x: Math.cos(ang)*MAX*d, y: Math.sin(ang)*MAX*d };
+  }
+
+  function loop(){
+    requestAnimationFrame(loop);
+
+    const oL = pupilOffset(scleraL);
+    const oR = pupilOffset(scleraR);
+    curLX += (oL.x-curLX)*0.18; curLY += (oL.y-curLY)*0.18;
+    curRX += (oR.x-curRX)*0.18; curRY += (oR.y-curRY)*0.18;
+    pupilL.setAttribute('transform','translate('+curLX.toFixed(2)+' '+curLY.toFixed(2)+')');
+    pupilR.setAttribute('transform','translate('+curRX.toFixed(2)+' '+curRY.toFixed(2)+')');
+
+    // el cuerpo se inclina hacia el cursor
+    const sr = svgEl.getBoundingClientRect();
+    const scx = sr.left + sr.width/2;
+    const targetLean = Math.max(-7, Math.min(7, (px - scx)/22));
+    curLean += (targetLean-curLean)*0.08;
+    lean.setAttribute('transform','rotate('+curLean.toFixed(2)+' 90 200)');
+  }
+  if(!reduce) loop();
+
+  // ---------- 4) parpadeo ----------
+  function blink(){
+    eyes.classList.add('blink');
+    setTimeout(()=> eyes.classList.remove('blink'), 130);
+    setTimeout(blink, 2200 + Math.random()*3200);
+  }
+  if(!reduce) setTimeout(blink, 1500);
+
+  // ---------- 5) revelado al hacer scroll ----------
+  const revealer = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); revealer.unobserve(e.target); }});
+  }, { threshold:0.12 });
+  document.querySelectorAll('.reveal').forEach(el=> revealer.observe(el));
+
+  // ---------- 6) darle una croqueta de corazón ----------
+  const treatBtn   = document.getElementById('treatBtn');
+  const treatCount = document.getElementById('treatCount');
+  const react      = document.getElementById('chin-react');
+  const nose       = document.getElementById('nose');
+  let count = 0, feeding = false;
+
+  const KIBBLE = '<svg viewBox="0 0 24 24" width="22" height="22"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5.5 6 5.5c2 0 3.2 1.2 4 2.3.8-1.1 2-2.3 4-2.3 3.5 0 5 3.5 3.5 6.5C19 16.5 12 21 12 21z" fill="#b9824f"/></svg>';
+  const HEART  = '<svg viewBox="0 0 24 24" width="16" height="16"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5.5 6 5.5c2 0 3.2 1.2 4 2.3.8-1.1 2-2.3 4-2.3 3.5 0 5 3.5 3.5 6.5C19 16.5 12 21 12 21z" fill="#e3a6ae"/></svg>';
+
+  treatBtn.addEventListener('click', ()=>{
+    if(feeding) return;
+    feeding = true;
+
+    const b = treatBtn.getBoundingClientRect();
+    const n = nose.getBoundingClientRect();
+    const sx = b.left + b.width/2,  sy = b.top + b.height/2;
+    const ex = n.left + n.width/2,  ey = n.top + n.height/2;
+
+    // la croqueta vuela hacia el hocico
+    const fly = document.createElement('div');
+    fly.className = 'kibble-fly';
+    fly.innerHTML = KIBBLE;
+    fly.style.left = (sx-11)+'px';
+    fly.style.top  = (sy-11)+'px';
+    document.body.appendChild(fly);
+    requestAnimationFrame(()=>{
+      fly.style.transform = 'translate('+(ex-sx)+'px,'+(ey-sy)+'px) rotate(360deg)';
+    });
+
+    setTimeout(()=>{
+      fly.style.opacity = '0';
+      setTimeout(()=> fly.remove(), 200);
+
+      if(!reduce){
+        // mordisquito feliz
+        react.classList.add('happy');
+        eyes.classList.add('hide');
+        setTimeout(()=>{ react.classList.remove('happy'); eyes.classList.remove('hide'); }, 650);
+        // corazoncitos
+        for(let i=0;i<4;i++){
+          const h = document.createElement('div');
+          h.className = 'heart-pop';
+          h.innerHTML = HEART;
+          h.style.left = (ex-8 + (Math.random()*30-15))+'px';
+          h.style.top  = (ey-12)+'px';
+          h.style.animationDelay = (i*0.08)+'s';
+          document.body.appendChild(h);
+          setTimeout(()=> h.remove(), 1300 + i*80);
+        }
+      }
+      count++;
+      treatCount.textContent = count;
+      feeding = false;
+    }, 600);
+  });
+
+  // ---------- recalcular al cargar/redimensionar ----------
+  window.addEventListener('resize', placeChin);
+  window.addEventListener('load', placeChin);
+  placeChin();
+})();
+</script>
+</body>
+</html>
