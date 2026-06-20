@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>[Tu Nombre] — Perfil académico</title>
+<title>Monse Arriaga — Computer Science</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,17 +11,17 @@
 
 <style>
 :root{
-  --night:    #20233b;
-  --night-2:  #2b3056;
-  --paper:    #f3f2f7;
+  --night:    #2c2630;   /* gris-plomo cálido (barra lateral) */
+  --night-2:  #4a3744;   /* malva para el degradado */
+  --paper:    #f7f1f4;   /* gris rosado muy claro */
   --card:     #ffffff;
-  --ink:      #23263a;
-  --muted:    #6c7088;
-  --soft:     #c9cbe0;
-  --accent:   #e6a07a;
-  --accent-2: #b6a6d6;
-  --line:     #e4e3ee;
-  --line-d:   #3a3f63;
+  --ink:      #2c2630;
+  --muted:    #837986;
+  --soft:     #ddd1d9;
+  --accent:   #db6f97;   /* rosa */
+  --accent-2: #c2a3bd;   /* lila apagado */
+  --line:     #ece2e8;
+  --line-d:   #50404b;
   --sidebar-w: 340px;
 }
 
@@ -36,7 +36,7 @@ body{
 }
 a{ color:inherit; }
 
-/* ===================== BARRA LATERAL ===================== */
+/* ===================== SIDEBAR ===================== */
 .sidebar{
   position:fixed; top:0; left:0;
   width:var(--sidebar-w); height:100vh;
@@ -62,7 +62,6 @@ a{ color:inherit; }
   display:flex; align-items:center;
   margin:30px 0;
 }
-/* la chinchilla vive aquí y se desliza a la opción activa */
 .chin-holder{
   position:absolute; left:-4px; top:0;
   width:140px; height:150px;
@@ -95,6 +94,17 @@ a{ color:inherit; }
   background:var(--accent); transform:scale(1.5);
 }
 
+.treat{
+  display:inline-flex; align-items:center; gap:9px;
+  background:none; border:1px dashed var(--line-d); color:var(--soft);
+  font-family:'Space Mono', monospace; font-size:12px; letter-spacing:.03em;
+  padding:9px 15px; border-radius:100px; cursor:pointer;
+  margin-bottom:18px; transition:border-color .2s, color .2s, transform .12s;
+}
+.treat:hover{ border-color:var(--accent); color:#fff; }
+.treat:active{ transform:scale(.95); }
+.treat .count{ color:var(--accent); font-weight:700; }
+
 .social{
   display:flex; flex-wrap:wrap; gap:8px 18px;
   font-family:'Space Mono', monospace; font-size:12px; letter-spacing:.04em;
@@ -106,7 +116,7 @@ a{ color:inherit; }
 }
 .social a:hover{ color:var(--accent); border-color:var(--accent); }
 
-/* ===================== CONTENIDO ===================== */
+/* ===================== CONTENT ===================== */
 .content{ margin-left:var(--sidebar-w); max-width:760px; padding:0 56px; }
 section{ padding:96px 0; border-bottom:1px solid var(--line); }
 section:last-child{ border-bottom:none; }
@@ -117,18 +127,18 @@ section:last-child{ border-bottom:none; }
   color:var(--accent); margin-bottom:18px;
 }
 
-#inicio{ padding-top:120px; }
-#inicio h2{
+#home{ padding-top:120px; }
+#home h2{
   font-family:'Fraunces', serif; font-weight:600;
-  font-size:clamp(34px, 5vw, 52px); line-height:1.08;
+  font-size:clamp(34px, 5vw, 50px); line-height:1.1;
   letter-spacing:-0.01em; margin-bottom:24px;
 }
-#inicio h2 .hl{ color:var(--accent); font-style:italic; }
-.lead{ font-size:19px; color:var(--ink); max-width:60ch; }
+#home h2 .hl{ color:var(--accent); font-style:italic; }
+.lead{ font-size:18px; color:var(--ink); max-width:62ch; }
 .lead + .lead{ margin-top:18px; color:var(--muted); font-size:17px; }
 
 h3{ font-family:'Fraunces', serif; font-weight:600; font-size:30px; margin-bottom:22px; }
-.prose p{ color:var(--muted); margin-bottom:16px; max-width:62ch; }
+.prose p{ color:var(--muted); margin-bottom:16px; max-width:64ch; }
 .chips{ display:flex; flex-wrap:wrap; gap:10px; margin-top:24px; }
 .chip{
   font-size:13px; font-weight:500; padding:7px 15px; border-radius:100px;
@@ -145,12 +155,12 @@ h3{ font-family:'Fraunces', serif; font-weight:600; font-size:30px; margin-botto
 .cv-card .meta strong{ color:var(--ink); font-weight:700; }
 .btn{
   display:inline-flex; align-items:center; gap:10px;
-  background:var(--accent); color:#2a1c12; font-weight:600; font-size:15px;
+  background:var(--accent); color:#3a2230; font-weight:600; font-size:15px;
   text-decoration:none; padding:14px 26px; border-radius:100px;
   transition:transform .2s, box-shadow .2s, background .2s;
-  box-shadow:0 6px 20px -8px rgba(230,160,122,.8);
+  box-shadow:0 6px 20px -8px rgba(219,111,151,.8);
 }
-.btn:hover{ transform:translateY(-2px); background:#eaad8c; box-shadow:0 12px 26px -10px rgba(230,160,122,.9); }
+.btn:hover{ transform:translateY(-2px); background:#e283a6; box-shadow:0 12px 26px -10px rgba(219,111,151,.9); }
 .btn svg{ width:18px; height:18px; }
 
 .timeline{ position:relative; margin-top:10px; padding-left:30px; }
@@ -170,7 +180,7 @@ h3{ font-family:'Fraunces', serif; font-weight:600; font-size:30px; margin-botto
   color:var(--accent-2); font-weight:700;
 }
 .event h4{ font-family:'Fraunces', serif; font-weight:600; font-size:19px; margin:4px 0 6px; }
-.event p{ color:var(--muted); font-size:15px; max-width:58ch; }
+.event p{ color:var(--muted); font-size:15px; max-width:60ch; }
 
 .contact-links{ display:flex; flex-direction:column; gap:4px; }
 .contact-links a{
@@ -184,7 +194,7 @@ h3{ font-family:'Fraunces', serif; font-weight:600; font-size:30px; margin-botto
 .reveal{ opacity:0; transform:translateY(24px); transition:opacity .7s ease, transform .7s ease; }
 .reveal.in{ opacity:1; transform:none; }
 
-/* ===================== ANIMACIONES DE LA CHINCHILLA ===================== */
+/* ===================== CHINCHILLA ANIMATIONS ===================== */
 #chin-bob{ transform-box:fill-box; transform-origin:50% 100%; animation:bob 4s ease-in-out infinite; }
 @keyframes bob{ 0%,100%{ transform:translateY(0) rotate(0deg); } 50%{ transform:translateY(-5px) rotate(-1deg); } }
 
@@ -199,13 +209,13 @@ h3{ font-family:'Fraunces', serif; font-weight:600; font-size:30px; margin-botto
 
 #eyes{ transform-box:fill-box; transform-origin:50% 50%; transition:transform .09s ease; }
 #eyes.blink{ transform:scaleY(.08); }
+#eyes.hide{ opacity:0; }
 
 #arm-l{ transform-box:fill-box; transform-origin:60% 0%; animation:armL 4s ease-in-out infinite; }
 #arm-r{ transform-box:fill-box; transform-origin:40% 0%; animation:armR 4s ease-in-out infinite .3s; }
 @keyframes armL{ 0%,100%{ transform:rotate(0deg);} 50%{ transform:rotate(5deg);} }
 @keyframes armR{ 0%,100%{ transform:rotate(0deg);} 50%{ transform:rotate(-5deg);} }
 
-/* ----- reacción al alimentarla ----- */
 #chin-react{ transform-box:fill-box; transform-origin:50% 60%; }
 #chin-react.happy{ animation:chomp .6s ease; }
 @keyframes chomp{
@@ -213,22 +223,8 @@ h3{ font-family:'Fraunces', serif; font-weight:600; font-size:30px; margin-botto
   45%{transform:scale(.95,1.06);} 70%{transform:scale(1.05,.96);} 100%{transform:scale(1,1);}
 }
 .happy-eye{ opacity:0; }
-#eyes.hide{ opacity:0; }
 #chin-react.happy .happy-eye{ opacity:1; }
 
-/* botón "dale una croqueta" */
-.treat{
-  display:inline-flex; align-items:center; gap:9px;
-  background:none; border:1px dashed var(--line-d); color:var(--soft);
-  font-family:'Space Mono', monospace; font-size:12px; letter-spacing:.03em;
-  padding:9px 15px; border-radius:100px; cursor:pointer;
-  margin-bottom:18px; transition:border-color .2s, color .2s, transform .12s;
-}
-.treat:hover{ border-color:var(--accent); color:#fff; }
-.treat:active{ transform:scale(.95); }
-.treat .count{ color:var(--accent); font-weight:700; }
-
-/* croqueta voladora y corazoncitos */
 .kibble-fly{
   position:fixed; width:22px; height:22px; z-index:60; pointer-events:none;
   transition:transform .6s cubic-bezier(.45,-0.25,.5,1), opacity .2s;
@@ -254,7 +250,7 @@ h3{ font-family:'Fraunces', serif; font-weight:600; font-size:30px; margin-botto
   }
   .nav{ padding-left:0; flex-direction:row; flex-wrap:wrap; justify-content:center; gap:4px 22px; }
   .content{ margin-left:0; padding:0 24px; max-width:none; }
-  #inicio{ padding-top:60px; }
+  #home{ padding-top:60px; }
   section{ padding:64px 0; }
 }
 @media (prefers-reduced-motion: reduce){
@@ -266,94 +262,93 @@ h3{ font-family:'Fraunces', serif; font-weight:600; font-size:30px; margin-botto
 </head>
 <body>
 
-<!-- ================= BARRA LATERAL ================= -->
+<!-- ================= SIDEBAR ================= -->
 <aside class="sidebar">
   <div class="brand">
-    <div class="eyebrow">Perfil académico</div>
-    <h1>[Tu Nombre<br>Apellido]</h1>
-    <div class="role">[Doctorando en Ciencias de la Computación · Universidad X]</div>
+    <div class="eyebrow">Academic profile</div>
+    <h1>Monse<br>Arriaga</h1>
+    <div class="role">Computer Science · UNAM</div>
   </div>
 
   <div class="nav-wrap">
-    <!-- ====== CHINCHILLA SVG (original) ====== -->
     <div class="chin-holder" aria-hidden="true">
       <svg viewBox="0 0 180 210" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <radialGradient id="fur" cx="38%" cy="32%" r="80%">
-            <stop offset="0%" stop-color="#c2c8db"/>
-            <stop offset="60%" stop-color="#a6adc4"/>
-            <stop offset="100%" stop-color="#8b93ad"/>
+            <stop offset="0%" stop-color="#ccc1c9"/>
+            <stop offset="60%" stop-color="#b0a6ae"/>
+            <stop offset="100%" stop-color="#948a90"/>
           </radialGradient>
           <radialGradient id="belly" cx="50%" cy="35%" r="75%">
-            <stop offset="0%" stop-color="#f3f1f7"/>
-            <stop offset="100%" stop-color="#ddd9e8"/>
+            <stop offset="0%" stop-color="#f4eef2"/>
+            <stop offset="100%" stop-color="#e3dae0"/>
           </radialGradient>
         </defs>
 
         <g id="chin-lean">
           <g id="chin-bob">
           <g id="chin-react">
-            <!-- sombra -->
-            <ellipse cx="90" cy="197" rx="44" ry="7" fill="#171526" opacity="0.12"/>
+            <!-- shadow -->
+            <ellipse cx="90" cy="197" rx="44" ry="7" fill="#2b2630" opacity="0.12"/>
 
-            <!-- cola esponjada -->
+            <!-- fluffy tail -->
             <g id="tail">
-              <circle cx="46" cy="158" r="16" fill="#9aa1ba"/>
-              <circle cx="37" cy="138" r="14" fill="#a6adc4"/>
-              <circle cx="40" cy="118" r="11" fill="#b3b9cf"/>
+              <circle cx="46" cy="158" r="16" fill="#9d929a"/>
+              <circle cx="37" cy="138" r="14" fill="#b0a6ae"/>
+              <circle cx="40" cy="118" r="11" fill="#bcb2ba"/>
             </g>
 
-            <!-- cuerpo -->
+            <!-- body -->
             <ellipse cx="90" cy="142" rx="48" ry="50" fill="url(#fur)"/>
-            <!-- patitas -->
-            <ellipse cx="73" cy="184" rx="13" ry="8" fill="#9aa1ba"/>
-            <ellipse cx="107" cy="184" rx="13" ry="8" fill="#9aa1ba"/>
-            <!-- pancita -->
+            <!-- feet -->
+            <ellipse cx="73" cy="184" rx="13" ry="8" fill="#9d929a"/>
+            <ellipse cx="107" cy="184" rx="13" ry="8" fill="#9d929a"/>
+            <!-- belly -->
             <ellipse cx="90" cy="150" rx="28" ry="34" fill="url(#belly)"/>
-            <!-- bracitos -->
-            <g id="arm-l"><ellipse cx="63" cy="150" rx="8" ry="13" fill="#9fa6bd"/></g>
-            <g id="arm-r"><ellipse cx="117" cy="150" rx="8" ry="13" fill="#9fa6bd"/></g>
+            <!-- arms -->
+            <g id="arm-l"><ellipse cx="63" cy="150" rx="8" ry="13" fill="#a59aa1"/></g>
+            <g id="arm-r"><ellipse cx="117" cy="150" rx="8" ry="13" fill="#a59aa1"/></g>
 
-            <!-- orejas -->
+            <!-- ears -->
             <g class="ear ear-l">
-              <ellipse cx="63" cy="44" rx="15" ry="20" fill="#9fa6bd" transform="rotate(-12 63 44)"/>
+              <ellipse cx="63" cy="44" rx="15" ry="20" fill="#a59aa1" transform="rotate(-12 63 44)"/>
               <ellipse cx="64" cy="46" rx="8" ry="12" fill="#e3a6ae" transform="rotate(-12 64 46)"/>
             </g>
             <g class="ear ear-r">
-              <ellipse cx="117" cy="44" rx="15" ry="20" fill="#9fa6bd" transform="rotate(12 117 44)"/>
+              <ellipse cx="117" cy="44" rx="15" ry="20" fill="#a59aa1" transform="rotate(12 117 44)"/>
               <ellipse cx="116" cy="46" rx="8" ry="12" fill="#e3a6ae" transform="rotate(12 116 46)"/>
             </g>
 
-            <!-- cabeza -->
+            <!-- head -->
             <circle cx="90" cy="78" r="46" fill="url(#fur)"/>
 
-            <!-- mejillas -->
+            <!-- cheeks -->
             <ellipse cx="62" cy="92" rx="9" ry="5.5" fill="#e3a6ae" opacity="0.55"/>
             <ellipse cx="118" cy="92" rx="9" ry="5.5" fill="#e3a6ae" opacity="0.55"/>
 
-            <!-- ojos (parpadean) -->
+            <!-- eyes -->
             <g id="eyes">
               <ellipse id="scleraL" cx="73" cy="76" rx="11" ry="13" fill="#fff"/>
               <ellipse id="scleraR" cx="107" cy="76" rx="11" ry="13" fill="#fff"/>
               <g id="pupilL">
-                <circle cx="73" cy="78" r="6.5" fill="#171526"/>
+                <circle cx="73" cy="78" r="6.5" fill="#2b2228"/>
                 <circle cx="75.4" cy="75" r="2.1" fill="#fff"/>
               </g>
               <g id="pupilR">
-                <circle cx="107" cy="78" r="6.5" fill="#171526"/>
+                <circle cx="107" cy="78" r="6.5" fill="#2b2228"/>
                 <circle cx="109.4" cy="75" r="2.1" fill="#fff"/>
               </g>
             </g>
 
-            <!-- ojos felices (al comer) -->
-            <path class="happy-eye" d="M64 75 q9 9 18 0" stroke="#171526" stroke-width="3" fill="none" stroke-linecap="round"/>
-            <path class="happy-eye" d="M98 75 q9 9 18 0" stroke="#171526" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <!-- happy eyes (while eating) -->
+            <path class="happy-eye" d="M64 75 q9 9 18 0" stroke="#2b2228" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <path class="happy-eye" d="M98 75 q9 9 18 0" stroke="#2b2228" stroke-width="3" fill="none" stroke-linecap="round"/>
 
-            <!-- nariz y boca -->
+            <!-- nose & mouth -->
             <ellipse id="nose" cx="90" cy="93" rx="4" ry="3" fill="#d98e98"/>
             <path d="M90 96 q-4 5 -8 2 M90 96 q4 5 8 2" stroke="#7d6470" stroke-width="1.6" fill="none" stroke-linecap="round"/>
 
-            <!-- bigotes -->
+            <!-- whiskers -->
             <g stroke="#ffffff" stroke-width="1.3" opacity="0.7" stroke-linecap="round">
               <line x1="84" y1="94" x2="52" y2="90"/>
               <line x1="84" y1="97" x2="52" y2="99"/>
@@ -367,108 +362,112 @@ h3{ font-family:'Fraunces', serif; font-weight:600; font-size:30px; margin-botto
     </div>
 
     <ul class="nav">
-      <li><a href="#inicio" class="active"><span class="dot"></span>Inicio</a></li>
-      <li><a href="#sobre"><span class="dot"></span>Sobre mí</a></li>
+      <li><a href="#home" class="active"><span class="dot"></span>Home</a></li>
+      <li><a href="#about"><span class="dot"></span>About</a></li>
       <li><a href="#cv"><span class="dot"></span>CV</a></li>
-      <li><a href="#cronograma"><span class="dot"></span>Cronograma</a></li>
-      <li><a href="#contacto"><span class="dot"></span>Contacto</a></li>
+      <li><a href="#timeline"><span class="dot"></span>Timeline</a></li>
+      <li><a href="#contact"><span class="dot"></span>Contact</a></li>
     </ul>
   </div>
 
-  <button class="treat" id="treatBtn" aria-label="Dar una croqueta a la chinchilla">
+  <button class="treat" id="treatBtn" aria-label="Give the chinchilla a treat">
     <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5.5 6 5.5c2 0 3.2 1.2 4 2.3.8-1.1 2-2.3 4-2.3 3.5 0 5 3.5 3.5 6.5C19 16.5 12 21 12 21z" fill="#b9824f"/></svg>
-    Dale una croqueta · <span class="count" id="treatCount">0</span>
+    Feed the chinchilla · <span class="count" id="treatCount">0</span>
   </button>
 
   <div class="social">
-    <a href="mailto:tucorreo@universidad.edu">Email</a>
-    <a href="https://github.com/tuusuario" target="_blank" rel="noopener">GitHub</a>
-    <a href="https://orcid.org/0000-0000-0000-0000" target="_blank" rel="noopener">ORCID</a>
-    <a href="https://scholar.google.com/" target="_blank" rel="noopener">Scholar</a>
+    <a href="mailto:monse_arriaga@ciencias.unam.mx">Email</a>
+    <a href="https://github.com/monse-arriaga" target="_blank" rel="noopener">GitHub</a>
   </div>
 </aside>
 
-<!-- ================= CONTENIDO ================= -->
+<!-- ================= CONTENT ================= -->
 <main class="content">
 
-  <section id="inicio">
-    <div class="eyebrow reveal">Hola 👋</div>
-    <h2 class="reveal">Soy [Tu Nombre], y estudio <span class="hl">[tu área de investigación]</span>.</h2>
-    <p class="lead reveal">Me interesa cómo [pregunta o problema central que te motiva]. Trabajo en la intersección de [campo 1] y [campo 2], con un enfoque en [método o tema concreto].</p>
-    <p class="lead reveal">Actualmente soy [tu posición] en [institución], donde investigo [línea de trabajo] bajo la supervisión de [nombre, opcional].</p>
+  <section id="home">
+    <div class="eyebrow reveal">¡Hola!</div>
+    <h2 class="reveal">I'm Monse Arriaga — I study how intelligent systems <span class="hl">learn, reason, and see the world</span>.</h2>
+    <p class="lead reveal">I'm a Computer Science student at the National Autonomous University of Mexico (UNAM), fascinated by how machines learn to perceive and make sense of the world. My work moves between academia and industry — research collaborations on one side, hands-on technology projects on the other — and I'm happiest working somewhere in that overlap.</p>
+    <p class="lead reveal">I'm especially drawn to computer vision, multimodal AI, world models, and representation learning, along with the trickier question of whether we can really trust and interpret what these systems do. I also study English Literature, which keeps me thinking about language and meaning from a completely different direction.</p>
+    <p class="lead reveal">Outside of research I'm usually deep in a long playthrough of <em>Baldur's Gate</em>.</p>
   </section>
 
-  <section id="sobre">
-    <div class="eyebrow reveal">01 — Sobre mí</div>
-    <h3 class="reveal">Un poco de contexto</h3>
+  <section id="about">
+    <div class="eyebrow reveal">01 — About</div>
+    <h3 class="reveal">A bit of context</h3>
     <div class="prose reveal">
-      <p>[Aquí va un párrafo breve sobre tu trayectoria: de dónde vienes académicamente, qué te llevó a tu área y qué tipo de problemas disfrutas resolver. Mantenlo personal pero conciso, 3 o 4 líneas.]</p>
-      <p>[Un segundo párrafo opcional: tu enfoque, tus valores como investigador/a, o lo que buscas a futuro. Puedes mencionar colaboraciones, docencia o divulgación si aplica.]</p>
+      <p>Throughout my academic journey, I have combined research, industry experience, and international collaborations. I have participated in research projects in artificial intelligence and computational modeling, completed international programs in Japan and Singapore, contributed to scientific publications, and worked in technology and data-driven roles in industry.</p>
+      <p>These experiences have strengthened my interest in advancing AI research and pursuing graduate studies at leading research institutions.</p>
     </div>
     <div class="chips reveal">
-      <span class="chip">[Interés 1]</span>
-      <span class="chip">[Interés 2]</span>
-      <span class="chip">[Interés 3]</span>
-      <span class="chip">[Método / herramienta]</span>
+      <span class="chip">Computer Vision</span>
+      <span class="chip">Multimodal AI</span>
+      <span class="chip">World Models</span>
+      <span class="chip">Representation Learning</span>
+      <span class="chip">Interpretability</span>
     </div>
   </section>
 
   <section id="cv">
-    <div class="eyebrow reveal">02 — Currículum</div>
-    <h3 class="reveal">Descarga mi CV</h3>
+    <div class="eyebrow reveal">02 — Résumé</div>
+    <h3 class="reveal">Download my CV</h3>
     <p class="prose reveal" style="color:var(--muted);max-width:58ch;margin-bottom:26px;">
-      Versión completa con publicaciones, formación, experiencia y referencias.
+      The full version, with publications, education, experience, and references.
     </p>
     <div class="cv-card reveal">
-      <div class="meta">Formato PDF · <strong>~200 KB</strong><br>Última actualización: [mes año]</div>
+      <div class="meta">PDF · <strong>Last updated June 2026</strong></div>
       <a class="btn" href="cv.pdf" download>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/></svg>
-        Descargar CV
+        Download CV
       </a>
     </div>
   </section>
 
-  <section id="cronograma">
-    <div class="eyebrow reveal">03 — Cronograma</div>
-    <h3 class="reveal">Lo que he hecho recientemente</h3>
+  <section id="timeline">
+    <div class="eyebrow reveal">03 — Timeline</div>
+    <h3 class="reveal">Recent activity</h3>
     <div class="timeline">
       <div class="event reveal">
-        <div class="when">2026 · Marzo</div>
-        <h4>[Publicación / artículo]</h4>
-        <p>Publiqué «[Título del artículo]» en [conferencia o revista]. [Una línea sobre de qué trata o por qué importa.]</p>
+        <div class="when">June 2026</div>
+        <h4>Co-authored a publication at CLEF</h4>
+        <p>Contributing to research in natural language processing and information retrieval.</p>
       </div>
       <div class="event reveal">
-        <div class="when">2025 · Noviembre</div>
-        <h4>[Presentación en congreso]</h4>
-        <p>Presenté [tema/poster/charla] en [nombre del evento], [ciudad o modalidad].</p>
+        <div class="when">June 2026</div>
+        <h4>Paper accepted at ICPR 2026</h4>
+        <p>An extended version of the Bluebird project, with additional experiments and analyses, was accepted at the International Conference on Pattern Recognition (ICPR 2026).</p>
       </div>
       <div class="event reveal">
-        <div class="when">2025 · Junio</div>
-        <h4>[Beca / premio / reconocimiento]</h4>
-        <p>Recibí [nombre de la beca o premio] otorgado por [institución].</p>
+        <div class="when">June 2026</div>
+        <h4>Accepted to the CVPR LatinX Workshop</h4>
+        <p>With “Towards Benchmarking the Bluebird in the Wild,” a work focused on evaluating and benchmarking AI systems under real-world conditions.</p>
       </div>
       <div class="event reveal">
-        <div class="when">2024 · Septiembre</div>
-        <h4>[Inicio de programa o proyecto]</h4>
-        <p>Comencé [doctorado / proyecto de investigación] sobre [tema] en [institución].</p>
+        <div class="when">Jun – Aug 2025</div>
+        <h4>Research Intern · National University of Singapore (NUS)</h4>
+        <p>Conducted large-scale NLP research on political discourse using transformer-based embeddings, clustering algorithms, and representation learning techniques.</p>
       </div>
       <div class="event reveal">
-        <div class="when">2024 · Enero</div>
-        <h4>[Hito anterior]</h4>
-        <p>[Describe brevemente: titulación, colaboración, estancia, etc.]</p>
+        <div class="when">2024 – 2025</div>
+        <h4>Software Cybersecurity Engineer · Honeywell</h4>
+        <p>Developed automation and cybersecurity solutions for industrial and aerospace applications.</p>
+      </div>
+      <div class="event reveal">
+        <div class="when">2024</div>
+        <h4>AI Internship in Japan · METI Program (AWL Inc.)</h4>
+        <p>Completed an AI-focused internship through the METI Government Internship Program, developing performance analysis and monitoring tools for edge AI systems at AWL Inc.</p>
       </div>
     </div>
   </section>
 
-  <section id="contacto">
-    <div class="eyebrow reveal">04 — Contacto</div>
-    <h3 class="reveal">Hablemos</h3>
+  <section id="contact">
+    <div class="eyebrow reveal">04 — Contact</div>
+    <h3 class="reveal">Let's talk</h3>
     <div class="contact-links reveal">
-      <a href="mailto:tucorreo@universidad.edu">tucorreo@universidad.edu</a>
-      <a href="https://github.com/tuusuario" target="_blank" rel="noopener">github.com/tuusuario</a>
-      <a href="https://scholar.google.com/" target="_blank" rel="noopener">Google Scholar</a>
+      <a href="mailto:monse_arriaga@ciencias.unam.mx">monse_arriaga@ciencias.unam.mx</a>
+      <a href="https://github.com/monse-arriaga" target="_blank" rel="noopener">github.com/monse-arriaga</a>
     </div>
-    <div class="foot">© 2026 [Tu Nombre] · Hecho con 🐭 y GitHub Pages</div>
+    <div class="foot">© 2026 Monse Arriaga · Made with 🐭 and GitHub Pages</div>
   </section>
 
 </main>
@@ -487,7 +486,7 @@ h3{ font-family:'Fraunces', serif; font-weight:600; font-size:30px; margin-botto
   const svgEl    = holder.querySelector('svg');
   const reduce   = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // ---------- 1) navegación: SIEMPRE hace scroll dentro de la página ----------
+  // ---------- 1) nav always scrolls within the page ----------
   links.forEach(link=>{
     link.addEventListener('click', e=>{
       const id = link.getAttribute('href');
@@ -500,7 +499,7 @@ h3{ font-family:'Fraunces', serif; font-weight:600; font-size:30px; margin-botto
     });
   });
 
-  // ---------- 2) la chinchilla se desliza hasta la opción activa/hover ----------
+  // ---------- 2) chinchilla slides to the active/hovered option ----------
   let activeIndex = 0, hoverIndex = -1;
   const isMobile = () => window.innerWidth <= 880;
 
@@ -510,7 +509,7 @@ h3{ font-family:'Fraunces', serif; font-weight:600; font-size:30px; margin-botto
     const wrapRect = navWrap.getBoundingClientRect();
     const lr = links[i].getBoundingClientRect();
     const centerPx = (lr.top + lr.height/2) - wrapRect.top;
-    const y = centerPx - holder.offsetHeight/2;   // centra la chinchilla en la opción
+    const y = centerPx - holder.offsetHeight/2;
     holder.style.transform = 'translateY(' + y + 'px)';
   }
   links.forEach((link, i)=>{
@@ -520,7 +519,7 @@ h3{ font-family:'Fraunces', serif; font-weight:600; font-size:30px; margin-botto
     link.addEventListener('blur',       ()=>{ hoverIndex = -1; placeChin(); });
   });
 
-  // scrollspy: marca la sección visible y la chinchilla la sigue
+  // scrollspy
   const sections = links.map(l=> document.querySelector(l.getAttribute('href')));
   const spy = new IntersectionObserver(entries=>{
     entries.forEach(e=>{
@@ -537,17 +536,16 @@ h3{ font-family:'Fraunces', serif; font-weight:600; font-size:30px; margin-botto
   }, { rootMargin:'-45% 0px -45% 0px', threshold:0 });
   sections.forEach(s=> s && spy.observe(s));
 
-  // ---------- 3) ojos + cuerpo siguiendo el cursor ----------
+  // ---------- 3) eyes + body follow the cursor ----------
   let px = window.innerWidth*0.5, py = window.innerHeight*0.4;
   let curLX=0, curLY=0, curRX=0, curRY=0, curLean=0;
-  const MAX = 3.4;            // cuánto se mueven las pupilas (unidades SVG)
+  const MAX = 3.4;
 
   window.addEventListener('mousemove', e=>{ px = e.clientX; py = e.clientY; });
 
   function pupilOffset(scleraEl){
     const r = scleraEl.getBoundingClientRect();
-    const cx = r.left + r.width/2;
-    const cy = r.top + r.height/2;
+    const cx = r.left + r.width/2, cy = r.top + r.height/2;
     const ang = Math.atan2(py - cy, px - cx);
     const d = Math.min(1, Math.hypot(px-cx, py-cy)/220);
     return { x: Math.cos(ang)*MAX*d, y: Math.sin(ang)*MAX*d };
@@ -555,15 +553,11 @@ h3{ font-family:'Fraunces', serif; font-weight:600; font-size:30px; margin-botto
 
   function loop(){
     requestAnimationFrame(loop);
-
-    const oL = pupilOffset(scleraL);
-    const oR = pupilOffset(scleraR);
+    const oL = pupilOffset(scleraL), oR = pupilOffset(scleraR);
     curLX += (oL.x-curLX)*0.18; curLY += (oL.y-curLY)*0.18;
     curRX += (oR.x-curRX)*0.18; curRY += (oR.y-curRY)*0.18;
     pupilL.setAttribute('transform','translate('+curLX.toFixed(2)+' '+curLY.toFixed(2)+')');
     pupilR.setAttribute('transform','translate('+curRX.toFixed(2)+' '+curRY.toFixed(2)+')');
-
-    // el cuerpo se inclina hacia el cursor
     const sr = svgEl.getBoundingClientRect();
     const scx = sr.left + sr.width/2;
     const targetLean = Math.max(-7, Math.min(7, (px - scx)/22));
@@ -572,7 +566,7 @@ h3{ font-family:'Fraunces', serif; font-weight:600; font-size:30px; margin-botto
   }
   if(!reduce) loop();
 
-  // ---------- 4) parpadeo ----------
+  // ---------- 4) blinking ----------
   function blink(){
     eyes.classList.add('blink');
     setTimeout(()=> eyes.classList.remove('blink'), 130);
@@ -580,13 +574,13 @@ h3{ font-family:'Fraunces', serif; font-weight:600; font-size:30px; margin-botto
   }
   if(!reduce) setTimeout(blink, 1500);
 
-  // ---------- 5) revelado al hacer scroll ----------
+  // ---------- 5) scroll reveal ----------
   const revealer = new IntersectionObserver(entries=>{
     entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); revealer.unobserve(e.target); }});
   }, { threshold:0.12 });
   document.querySelectorAll('.reveal').forEach(el=> revealer.observe(el));
 
-  // ---------- 6) darle una croqueta de corazón ----------
+  // ---------- 6) feed her a heart-shaped treat ----------
   const treatBtn   = document.getElementById('treatBtn');
   const treatCount = document.getElementById('treatCount');
   const react      = document.getElementById('chin-react');
@@ -599,13 +593,11 @@ h3{ font-family:'Fraunces', serif; font-weight:600; font-size:30px; margin-botto
   treatBtn.addEventListener('click', ()=>{
     if(feeding) return;
     feeding = true;
-
     const b = treatBtn.getBoundingClientRect();
     const n = nose.getBoundingClientRect();
-    const sx = b.left + b.width/2,  sy = b.top + b.height/2;
-    const ex = n.left + n.width/2,  ey = n.top + n.height/2;
+    const sx = b.left + b.width/2, sy = b.top + b.height/2;
+    const ex = n.left + n.width/2, ey = n.top + n.height/2;
 
-    // la croqueta vuela hacia el hocico
     const fly = document.createElement('div');
     fly.className = 'kibble-fly';
     fly.innerHTML = KIBBLE;
@@ -619,13 +611,10 @@ h3{ font-family:'Fraunces', serif; font-weight:600; font-size:30px; margin-botto
     setTimeout(()=>{
       fly.style.opacity = '0';
       setTimeout(()=> fly.remove(), 200);
-
       if(!reduce){
-        // mordisquito feliz
         react.classList.add('happy');
         eyes.classList.add('hide');
         setTimeout(()=>{ react.classList.remove('happy'); eyes.classList.remove('hide'); }, 650);
-        // corazoncitos
         for(let i=0;i<4;i++){
           const h = document.createElement('div');
           h.className = 'heart-pop';
@@ -637,13 +626,11 @@ h3{ font-family:'Fraunces', serif; font-weight:600; font-size:30px; margin-botto
           setTimeout(()=> h.remove(), 1300 + i*80);
         }
       }
-      count++;
-      treatCount.textContent = count;
+      count++; treatCount.textContent = count;
       feeding = false;
     }, 600);
   });
 
-  // ---------- recalcular al cargar/redimensionar ----------
   window.addEventListener('resize', placeChin);
   window.addEventListener('load', placeChin);
   placeChin();
