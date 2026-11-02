@@ -3,644 +3,730 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Monse Arriaga · Computer Science</title>
+<title>Monse Arriaga · Tacos de Guisado</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500&family=Patrick+Hand&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
 :root{
-  --night:    #2c2630;   /* gris-plomo cálido (barra lateral) */
-  --night-2:  #4a3744;   /* malva para el degradado */
-  --paper:    #f7f1f4;   /* gris rosado muy claro */
-  --card:     #ffffff;
-  --ink:      #2c2630;
-  --muted:    #837986;
-  --soft:     #ddd1d9;
-  --accent:   #db6f97;   /* rosa */
-  --accent-2: #c2a3bd;   /* lila apagado */
-  --line:     #ece2e8;
-  --line-d:   #50404b;
-  --sidebar-w: 340px;
+  /* paleta sacada del dibujo del puesto */
+  --sky:      #bfd0e2;   /* azul-gris del puesto */
+  --sky-2:    #a9bdd3;
+  --paper:    #f6f1e8;   /* papel del menú */
+  --card:     #fffdf8;
+  --ink:      #1f1f24;
+  --muted:    #6b6b73;
+  --yellow:   #f2d93b;
+  --orange:   #f2992e;
+  --red:      #e24b3b;
+  --green:    #2f8f4e;
+  --cola:     #8a3a1e;
+  --pink:     #f0b7c6;   /* orejas de la chinchilla */
+  --line:     rgba(31,31,36,.14);
 }
 
 *{ box-sizing:border-box; margin:0; padding:0; }
 html{ scroll-behavior:smooth; }
 body{
-  font-family:'Inter', system-ui, sans-serif;
-  background:var(--paper);
+  font-family:'Patrick Hand', 'Fraunces', cursive;
+  background:var(--sky);
   color:var(--ink);
-  line-height:1.65;
+  line-height:1.5;
   -webkit-font-smoothing:antialiased;
 }
 a{ color:inherit; }
+img{ display:block; }
 
-/* ===================== SIDEBAR ===================== */
-.sidebar{
-  position:fixed; top:0; left:0;
-  width:var(--sidebar-w); height:100vh;
-  background:radial-gradient(120% 80% at 20% 0%, var(--night-2) 0%, var(--night) 55%);
-  color:#fff;
-  display:flex; flex-direction:column;
-  padding:42px 34px;
-  overflow:hidden;
+/* ===================== HERO: EL PUESTO ===================== */
+.hero{
+  position:relative;
+  min-height:100svh;
+  display:flex; align-items:center; justify-content:center;
+  padding:0; overflow:hidden;
+  background:#6c7f8e url("street.jpg") center 60% / cover no-repeat;
 }
-.brand .eyebrow{
-  font-family:'Space Mono', monospace;
-  font-size:11px; letter-spacing:.22em; text-transform:uppercase;
-  color:var(--accent);
+/* velo suave para que el dibujo se lea sobre la foto */
+.hero::before{
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(180deg, rgba(20,30,40,.25), rgba(20,30,40,.08) 40%, rgba(20,30,40,.35));
+  pointer-events:none;
 }
-.brand h1{
-  font-family:'Fraunces', serif; font-weight:600;
-  font-size:32px; line-height:1.1; margin:10px 0 6px;
+.stand{
+  position:relative;
+  width:min(92%, calc(100svh * 1300 / 1189 * .86));
+  aspect-ratio:1300 / 1189;
+  margin:0 auto;
+  filter:drop-shadow(0 18px 24px rgba(0,0,0,.35));
 }
-.brand .role{ font-size:14px; color:var(--soft); }
-
-.nav-wrap{
-  position:relative; flex:1;
-  display:flex; align-items:center;
-  margin:30px 0;
-}
-.chin-holder{
-  position:absolute; left:-4px; top:0;
-  width:140px; height:150px;
-  z-index:1; pointer-events:none;
-  transition:transform .55s cubic-bezier(.22,1,.36,1);
-  will-change:transform;
-}
-.chin-holder svg{ width:100%; height:100%; overflow:visible; }
-
-.nav{
-  position:relative; z-index:2;
-  list-style:none; width:100%;
-  padding-left:120px;
-  display:flex; flex-direction:column; gap:6px;
-}
-.nav a{
-  display:block; font-size:16px; font-weight:500;
-  color:var(--soft); text-decoration:none; padding:8px 0;
-  transition:color .25s, transform .25s;
-}
-.nav a .dot{
-  display:inline-block; width:7px; height:7px; border-radius:50%;
-  background:var(--line-d); margin-right:12px; vertical-align:middle;
-  transition:background .25s, transform .25s;
-}
-.nav a:hover, .nav a:focus-visible, .nav a.active{
-  color:#fff; transform:translateX(4px); outline:none;
-}
-.nav a:hover .dot, .nav a:focus-visible .dot, .nav a.active .dot{
-  background:var(--accent); transform:scale(1.5);
+.stand > img{
+  width:100%; height:100%; object-fit:contain;
+  user-select:none; -webkit-user-drag:none;
 }
 
-.treat{
-  display:inline-flex; align-items:center; gap:9px;
-  background:none; border:1px dashed var(--line-d); color:var(--soft);
-  font-family:'Space Mono', monospace; font-size:12px; letter-spacing:.03em;
-  padding:9px 15px; border-radius:100px; cursor:pointer;
-  margin-bottom:18px; transition:border-color .2s, color .2s, transform .12s;
+/* nombre colgado en la esquina del hero, no sobre el dibujo */
+.sign{
+  position:absolute; left:18px; top:16px; z-index:3;
+  font-family:'Fraunces', serif; font-weight:700;
+  color:var(--ink); line-height:1;
+  pointer-events:none;
 }
-.treat:hover{ border-color:var(--accent); color:#fff; }
-.treat:active{ transform:scale(.95); }
-.treat .count{ color:var(--accent); font-weight:700; }
+.sign .who{
+  font-family:'Space Mono', monospace; font-weight:700;
+  font-size:clamp(10px, 1vw, 13px); letter-spacing:.2em; text-transform:uppercase;
+  background:var(--yellow); padding:4px 8px; display:inline-block;
+  transform:rotate(-2deg); box-shadow:2px 2px 0 var(--ink);
+}
 
-.social{
-  display:flex; flex-wrap:wrap; gap:8px 18px;
+/* la "pizarra" de abajo: usa el espacio vacío debajo de MENU: */
+.board{
+  position:absolute; left:42%; top:68%; width:49%;
+  font-family:'Patrick Hand', cursive; font-size:clamp(12px, 1.75vw, 24px);
+  line-height:1.12; color:var(--ink);
+}
+.board ul{ list-style:none; }
+.board li{ display:flex; gap:.5em; align-items:baseline; }
+.board li a{ text-decoration:none; border-bottom:2px solid transparent; transition:border-color .2s; }
+.board li a:hover{ border-color:var(--red); }
+.board li .dots{ flex:1; border-bottom:2px dotted rgba(31,31,36,.45); transform:translateY(-.3em); }
+.board li .price{ font-family:'Space Mono', monospace; font-size:.72em; }
+
+.scroll-hint{
+  position:absolute; left:50%; bottom:14px; transform:translateX(-50%); z-index:3;
+  font-family:'Patrick Hand', cursive; font-size:18px; color:#fff; text-shadow:0 1px 3px rgba(0,0,0,.6);
+  display:flex; flex-direction:column; align-items:center; gap:2px;
+  text-decoration:none; opacity:.85;
+  animation:hint 2.4s ease-in-out infinite;
+}
+.scroll-hint span{ font-size:26px; line-height:1; }
+@keyframes hint{ 0%,100%{ transform:translate(-50%,0);} 50%{ transform:translate(-50%,6px);} }
+
+/* ---- contador de tacos ---- */
+.tacos-fed{
+  position:absolute; right:14px; top:14px; z-index:3;
   font-family:'Space Mono', monospace; font-size:12px; letter-spacing:.04em;
+  background:var(--card); border:2px solid var(--ink); border-radius:100px;
+  padding:7px 14px; box-shadow:3px 3px 0 var(--ink);
+  display:flex; align-items:center; gap:8px;
 }
-.social a{
-  color:var(--soft); text-decoration:none;
-  border-bottom:1px solid transparent;
-  transition:color .2s, border-color .2s;
+.tacos-fed b{ color:var(--red); }
+
+/* ===================== LA TELE: videos de proyectos ===================== */
+.tv{
+  position:absolute; left:61.8%; top:26.6%; width:31%; height:15.4%;
+  transform:rotate(-.6deg); transform-origin:center;
+  border-radius:4% / 10%; overflow:hidden; background:#111;
+  box-shadow:inset 0 0 18px rgba(0,0,0,.6);
+  cursor:pointer;
 }
-.social a:hover{ color:var(--accent); border-color:var(--accent); }
-
-/* ===================== CONTENT ===================== */
-.content{ margin-left:var(--sidebar-w); max-width:760px; padding:0 56px; }
-section{ padding:96px 0; border-bottom:1px solid var(--line); }
-section:last-child{ border-bottom:none; }
-
-.eyebrow{
-  font-family:'Space Mono', monospace; font-size:12px;
-  letter-spacing:.2em; text-transform:uppercase;
-  color:var(--accent); margin-bottom:18px;
+.tv video{ width:100%; height:100%; object-fit:cover; display:block; background:#111; }
+.tv img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:none; }
+.tv.photo video{ display:none; }
+.tv.photo img{ display:block; animation:ken 12s ease-in-out infinite alternate; }
+@keyframes ken{ from{ transform:scale(1) translate(0,0);} to{ transform:scale(1.12) translate(-2%,2%);} }
+@media (prefers-reduced-motion: reduce){ .tv.photo img{ animation:none; } }
+.tv .static{
+  position:absolute; inset:0; display:none; align-items:center; justify-content:center; text-align:center;
+  color:#ddd; font-family:'Space Mono', monospace; font-size:clamp(8px, 1vw, 12px); line-height:1.3; letter-spacing:.05em;
+  background:
+    repeating-linear-gradient(0deg, rgba(255,255,255,.08) 0 1px, transparent 1px 3px),
+    radial-gradient(circle at 30% 40%, #777, #333 60%, #111);
+  animation:noise .25s steps(2) infinite;
 }
-
-#home{ padding-top:120px; }
-#home h2{
-  font-family:'Fraunces', serif; font-weight:600;
-  font-size:clamp(34px, 5vw, 50px); line-height:1.1;
-  letter-spacing:-0.01em; margin-bottom:24px;
+.tv.nosignal .static{ display:flex; }
+.tv.nosignal video{ opacity:0; }
+@keyframes noise{ 0%{ background-position:0 0, 0 0;} 100%{ background-position:0 2px, 3px 0;} }
+.tv::after{ /* brillo de pantalla + líneas de barrido */
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background:
+    repeating-linear-gradient(0deg, rgba(0,0,0,.12) 0 1px, transparent 1px 3px),
+    linear-gradient(115deg, rgba(255,255,255,.18), transparent 45%);
 }
-#home h2 .hl{ color:var(--accent); font-style:italic; }
-.lead{ font-size:18px; color:var(--ink); max-width:62ch; }
-.lead + .lead{ margin-top:18px; color:var(--muted); font-size:17px; }
-
-h3{ font-family:'Fraunces', serif; font-weight:600; font-size:30px; margin-bottom:22px; }
-.prose p{ color:var(--muted); margin-bottom:16px; max-width:64ch; }
-.chips{ display:flex; flex-wrap:wrap; gap:10px; margin-top:24px; }
-.chip{
-  font-size:13px; font-weight:500; padding:7px 15px; border-radius:100px;
-  background:#fff; border:1px solid var(--line); color:var(--ink);
+.tv .label{
+  position:absolute; left:4%; bottom:5%; max-width:92%;
+  font-family:'Space Mono', monospace; font-size:clamp(7px, .85vw, 11px); letter-spacing:.05em;
+  background:rgba(0,0,0,.65); color:#fff; padding:2px 6px; border-radius:3px;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis; pointer-events:none;
 }
-.chip::before{ content:'•'; color:var(--accent-2); margin-right:8px; }
+@media (prefers-reduced-motion: reduce){ .tv .static{ animation:none; } }
 
-.cv-card{
-  background:var(--card); border:1px solid var(--line); border-radius:18px;
-  padding:30px 32px; display:flex; align-items:center; justify-content:space-between;
-  gap:24px; flex-wrap:wrap;
+/* ===================== LA CHINCHILLA (whack-a-mole) ===================== */
+.hole{
+  position:absolute;
+  overflow:hidden;           /* lo que esté abajo del borde queda "escondido" */
+  pointer-events:none;
+  transform:translate(-50%, 0);
 }
-.cv-card .meta{ font-family:'Space Mono', monospace; font-size:12px; color:var(--muted); }
-.cv-card .meta strong{ color:var(--ink); font-weight:700; }
-.btn{
-  display:inline-flex; align-items:center; gap:10px;
-  background:var(--accent); color:#3a2230; font-weight:600; font-size:15px;
-  text-decoration:none; padding:14px 26px; border-radius:100px;
-  transition:transform .2s, box-shadow .2s, background .2s;
-  box-shadow:0 6px 20px -8px rgba(219,111,151,.8);
+.hole .chin{
+  width:100%; height:auto;
+  transform:translateY(105%);
+  transition:transform .45s cubic-bezier(.3,1.4,.5,1);
+  pointer-events:auto; cursor:pointer;
+  filter:drop-shadow(0 4px 6px rgba(0,0,0,.18));
+  -webkit-user-drag:none; user-select:none;
 }
-.btn:hover{ transform:translateY(-2px); background:#e283a6; box-shadow:0 12px 26px -10px rgba(219,111,151,.9); }
-.btn svg{ width:18px; height:18px; }
+.hole.up .chin{ transform:translateY(0); animation:peek 2.2s ease-in-out infinite .5s; }
+.hole.down .chin{ transition-timing-function:cubic-bezier(.5,0,.8,.4); transition-duration:.3s; }
+.hole.flip .chin{ transform:translateY(0) scaleX(-1); }
+.hole.flip.up .chin{ animation-name:peekFlip; }
+@keyframes peek{ 0%,100%{ transform:translateY(0) rotate(0);} 50%{ transform:translateY(-3%) rotate(-2deg);} }
+@keyframes peekFlip{ 0%,100%{ transform:translateY(0) scaleX(-1) rotate(0);} 50%{ transform:translateY(-3%) scaleX(-1) rotate(2deg);} }
+.hole.nom .chin{ animation:nom .5s ease !important; }
+@keyframes nom{ 0%{transform:scale(1,1);} 30%{transform:scale(1.1,.9);} 60%{transform:scale(.95,1.06);} 100%{transform:scale(1,1);} }
 
-.timeline{ position:relative; margin-top:10px; padding-left:30px; }
-.timeline::before{
-  content:''; position:absolute; left:6px; top:8px; bottom:8px; width:2px;
-  background:linear-gradient(var(--accent), var(--accent-2));
+.fly{
+  position:fixed; z-index:70; pointer-events:none; font-size:26px; line-height:1;
+  transition:transform .55s cubic-bezier(.45,-0.25,.5,1), opacity .2s;
 }
-.event{ position:relative; padding-bottom:34px; }
-.event:last-child{ padding-bottom:0; }
-.event::before{
-  content:''; position:absolute; left:-30px; top:5px;
-  width:14px; height:14px; border-radius:50%;
-  background:var(--paper); border:3px solid var(--accent);
-}
-.event .when{
-  font-family:'Space Mono', monospace; font-size:12px; letter-spacing:.05em;
-  color:var(--accent-2); font-weight:700;
-}
-.event h4{ font-family:'Fraunces', serif; font-weight:600; font-size:19px; margin:4px 0 6px; }
-.event p{ color:var(--muted); font-size:15px; max-width:60ch; }
-
-.contact-links{ display:flex; flex-direction:column; gap:4px; }
-.contact-links a{
-  font-family:'Fraunces', serif; font-size:22px; text-decoration:none;
-  color:var(--ink); width:fit-content;
-  border-bottom:2px solid transparent; transition:border-color .2s, color .2s;
-}
-.contact-links a:hover{ color:var(--accent); border-color:var(--accent); }
-.foot{ margin-top:40px; font-family:'Space Mono', monospace; font-size:11px; color:var(--muted); }
-
-.reveal{ opacity:0; transform:translateY(24px); transition:opacity .7s ease, transform .7s ease; }
-.reveal.in{ opacity:1; transform:none; }
-
-/* ===================== CHINCHILLA ANIMATIONS ===================== */
-#chin-bob{ transform-box:fill-box; transform-origin:50% 100%; animation:bob 4s ease-in-out infinite; }
-@keyframes bob{ 0%,100%{ transform:translateY(0) rotate(0deg); } 50%{ transform:translateY(-5px) rotate(-1deg); } }
-
-.ear{ transform-box:fill-box; transform-origin:50% 90%; }
-.ear-l{ animation:wiggleL 5s ease-in-out infinite; }
-.ear-r{ animation:wiggleR 5s ease-in-out infinite .4s; }
-@keyframes wiggleL{ 0%,88%,100%{ transform:rotate(0deg);} 92%{ transform:rotate(-9deg);} 96%{ transform:rotate(4deg);} }
-@keyframes wiggleR{ 0%,90%,100%{ transform:rotate(0deg);} 94%{ transform:rotate(9deg);} 98%{ transform:rotate(-4deg);} }
-
-#tail{ transform-box:fill-box; transform-origin:80% 90%; animation:sway 3.5s ease-in-out infinite; }
-@keyframes sway{ 0%,100%{ transform:rotate(-4deg);} 50%{ transform:rotate(6deg);} }
-
-#eyes{ transform-box:fill-box; transform-origin:50% 50%; transition:transform .09s ease; }
-#eyes.blink{ transform:scaleY(.08); }
-#eyes.hide{ opacity:0; }
-
-#arm-l{ transform-box:fill-box; transform-origin:60% 0%; animation:armL 4s ease-in-out infinite; }
-#arm-r{ transform-box:fill-box; transform-origin:40% 0%; animation:armR 4s ease-in-out infinite .3s; }
-@keyframes armL{ 0%,100%{ transform:rotate(0deg);} 50%{ transform:rotate(5deg);} }
-@keyframes armR{ 0%,100%{ transform:rotate(0deg);} 50%{ transform:rotate(-5deg);} }
-
-#chin-react{ transform-box:fill-box; transform-origin:50% 60%; }
-#chin-react.happy{ animation:chomp .6s ease; }
-@keyframes chomp{
-  0%{transform:scale(1,1);} 20%{transform:scale(1.08,.92);}
-  45%{transform:scale(.95,1.06);} 70%{transform:scale(1.05,.96);} 100%{transform:scale(1,1);}
-}
-.happy-eye{ opacity:0; }
-#chin-react.happy .happy-eye{ opacity:1; }
-
-.kibble-fly{
-  position:fixed; width:22px; height:22px; z-index:60; pointer-events:none;
-  transition:transform .6s cubic-bezier(.45,-0.25,.5,1), opacity .2s;
-}
-.heart-pop{
-  position:fixed; z-index:60; pointer-events:none; width:16px; height:16px;
+.pop{
+  position:fixed; z-index:70; pointer-events:none; font-size:18px; line-height:1;
   animation:floatUp 1s ease-out forwards;
 }
-@keyframes floatUp{
-  0%{ opacity:1; transform:translateY(0) scale(.5); }
-  100%{ opacity:0; transform:translateY(-48px) scale(1.1); }
+@keyframes floatUp{ 0%{ opacity:1; transform:translateY(0) scale(.6);} 100%{ opacity:0; transform:translateY(-50px) scale(1.1);} }
+
+/* ===================== EL MENÚ ===================== */
+.menu{
+  background:var(--paper);
+  padding:72px 24px 90px;
+  border-top:6px solid var(--ink);
+  background-image:
+    repeating-linear-gradient(0deg, transparent 0 31px, rgba(31,31,36,.05) 31px 32px);
+}
+.sheet{ max-width:820px; margin:0 auto; }
+
+.menu-title{
+  text-align:center; margin-bottom:54px;
+}
+.menu-title h2{
+  font-family:'Fraunces', serif; font-weight:700;
+  font-size:clamp(44px, 9vw, 92px); line-height:.95; letter-spacing:-.01em;
+  background:linear-gradient(100deg, var(--yellow) 0 40%, var(--orange) 40% 70%, var(--red) 70%);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  -webkit-text-stroke:2px var(--ink); paint-order:stroke fill;
+}
+.menu-title .sub{
+  font-family:'Patrick Hand', cursive; font-size:24px; margin-top:6px;
+}
+.menu-title .note{
+  display:inline-block; margin-top:14px;
+  font-family:'Space Mono', monospace; font-size:12px; letter-spacing:.14em; text-transform:uppercase;
+  border:2px dashed var(--ink); padding:6px 14px; border-radius:100px;
 }
 
+.course{ padding:44px 0; border-bottom:2px dashed var(--line); }
+.course:last-child{ border-bottom:none; }
+.course-head{
+  display:flex; align-items:baseline; gap:14px; margin-bottom:18px; flex-wrap:wrap;
+}
+.course-head .num{
+  font-family:'Space Mono', monospace; font-weight:700; font-size:13px; letter-spacing:.1em;
+  background:var(--green); color:#fff; padding:3px 9px; transform:rotate(-2deg); display:inline-block;
+}
+.course-head h3{
+  font-family:'Fraunces', serif; font-weight:700; font-size:clamp(28px, 4.5vw, 40px); line-height:1.05;
+}
+.course-head h3 em{ font-style:italic; color:var(--red); }
+.course-head .tag{
+  font-family:'Patrick Hand', cursive; font-size:17px; color:var(--muted);
+}
+
+.item{ display:flex; gap:.6em; align-items:baseline; margin:10px 0; }
+.item .name{ font-family:'Fraunces', serif; font-weight:700; font-size:21px; white-space:nowrap; }
+.item .dots{ flex:1; border-bottom:2px dotted rgba(31,31,36,.45); transform:translateY(-.35em); min-width:24px; }
+.item .price{ font-family:'Space Mono', monospace; font-weight:700; font-size:14px; white-space:nowrap; }
+.desc{ font-size:20px; color:#3b3b44; max-width:64ch; margin:2px 0 14px; }
+.desc em{ font-style:normal; background:linear-gradient(transparent 55%, rgba(242,217,59,.75) 55%); }
+
+.ingredients{ display:flex; flex-wrap:wrap; gap:10px; margin-top:14px; }
+.ingredients span{
+  font-size:18px; padding:5px 14px; border:2px solid var(--ink); border-radius:100px;
+  background:var(--card); box-shadow:2px 2px 0 var(--ink);
+}
+
+.takeaway{
+  display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap;
+  background:var(--card); border:2px solid var(--ink); border-radius:16px;
+  padding:22px 26px; box-shadow:5px 5px 0 var(--ink); margin-top:8px;
+}
+.takeaway .meta{ font-family:'Space Mono', monospace; font-size:12px; color:var(--muted); }
+.takeaway .meta b{ color:var(--ink); }
+.btn{
+  display:inline-flex; align-items:center; gap:10px;
+  background:var(--red); color:#fff; font-family:'Fraunces', serif; font-weight:700; font-size:18px;
+  text-decoration:none; padding:12px 24px; border-radius:100px; border:2px solid var(--ink);
+  box-shadow:3px 3px 0 var(--ink); transition:transform .15s, box-shadow .15s;
+}
+.btn:hover{ transform:translate(-2px,-2px); box-shadow:5px 5px 0 var(--ink); }
+.btn:active{ transform:translate(1px,1px); box-shadow:2px 2px 0 var(--ink); }
+
+/* platillos especiales = proyectos con demo */
+.dishes{ display:grid; grid-template-columns:repeat(auto-fit, minmax(230px, 1fr)); gap:18px; }
+.dish{
+  background:var(--card); border:2px solid var(--ink); border-radius:14px; padding:18px 18px 20px;
+  box-shadow:4px 4px 0 var(--ink); display:flex; flex-direction:column; gap:10px; min-width:0;
+}
+.dish-top{ display:flex; justify-content:space-between; align-items:flex-start; gap:10px; }
+.dish h4{ font-family:'Fraunces', serif; font-weight:700; font-size:21px; line-height:1.1; }
+.dish .status{
+  font-family:'Space Mono', monospace; font-size:10px; letter-spacing:.1em; text-transform:uppercase;
+  background:var(--yellow); padding:3px 7px; white-space:nowrap; transform:rotate(2deg);
+}
+.dish.soon .status{ background:var(--sky); }
+.dish p{ font-size:18px; color:#3b3b44; flex:1; }
+.dish-tags{ display:flex; flex-wrap:wrap; gap:6px; }
+.dish-tags span{ font-size:15px; padding:2px 10px; border:1.5px solid var(--ink); border-radius:100px; }
+.btn-sm{ font-size:15px; padding:9px 16px; align-self:flex-start; }
+.dish-actions{ display:flex; flex-wrap:wrap; gap:8px; }
+.btn-ghost{ background:var(--card); color:var(--ink); }
+
+/* timeline como "comandas" */
+.orders{ display:flex; flex-direction:column; gap:14px; }
+.order{
+  background:var(--card); border:2px solid var(--ink); padding:16px 20px 16px 18px;
+  position:relative; box-shadow:3px 3px 0 var(--ink);
+  transform:rotate(var(--tilt, 0deg));
+}
+.order:nth-child(odd){ --tilt:-.4deg; }
+.order:nth-child(even){ --tilt:.4deg; }
+.order::before{
+  content:''; position:absolute; left:-2px; top:-2px; bottom:-2px; width:8px;
+  background:repeating-linear-gradient(0deg, var(--red) 0 10px, var(--yellow) 10px 20px, var(--green) 20px 30px);
+}
+.order .when{ font-family:'Space Mono', monospace; font-size:12px; font-weight:700; letter-spacing:.08em; color:var(--cola); }
+.order h4{ font-family:'Fraunces', serif; font-weight:700; font-size:21px; margin:2px 0 4px; }
+.order p{ font-size:18px; color:#3b3b44; max-width:62ch; }
+
+.contact-links{ display:flex; flex-direction:column; gap:8px; }
+.contact-links a{
+  font-family:'Fraunces', serif; font-weight:700; font-size:clamp(18px, 3vw, 24px);
+  text-decoration:none; width:fit-content; word-break:break-all;
+  border-bottom:3px solid transparent; transition:border-color .2s, color .2s;
+}
+.contact-links a:hover{ color:var(--red); border-color:var(--red); }
+.foot{
+  margin-top:48px; text-align:center;
+  font-family:'Space Mono', monospace; font-size:11px; color:var(--muted);
+}
+
+/* reveal */
+.reveal{ opacity:0; transform:translateY(22px); transition:opacity .6s ease, transform .6s ease; }
+.reveal.in{ opacity:1; transform:none; }
+
 /* ===================== RESPONSIVE ===================== */
-@media (max-width: 880px){
-  :root{ --sidebar-w:0px; }
-  .sidebar{ position:relative; width:100%; height:auto; flex-direction:column; padding:30px 24px; }
-  .nav-wrap{ margin:18px 0 4px; flex-direction:column; align-items:center; }
-  .chin-holder{
-    position:relative; left:auto; top:auto;
-    width:130px; height:140px; margin-bottom:8px;
-    transform:none !important;
-  }
-  .nav{ padding-left:0; flex-direction:row; flex-wrap:wrap; justify-content:center; gap:4px 22px; }
-  .content{ margin-left:0; padding:0 24px; max-width:none; }
-  #home{ padding-top:60px; }
-  section{ padding:64px 0; }
+@media (max-width: 700px){
+  /* el puesto a lo ancho, sin flotar en un mar azul */
+  .hero{ min-height:auto; padding:64px 0 64px; align-items:flex-start; }
+  .stand{ width:100%; }
+  .hero{ padding-top:70px; }
+  .stand{ width:100%; }
+  .sign{ top:14px; left:0; width:100%; text-align:center; }
+  .sign .who{ font-size:10px; letter-spacing:.14em; }
+  .board{ left:40%; top:69%; width:52%; font-size:clamp(9px, 2.6vw, 13px); line-height:1.15; }
+  .board li .price{ display:none; }
+  .tacos-fed{ top:auto; bottom:14px; left:14px; right:auto; font-size:11px; padding:6px 10px; }
+  .scroll-hint{ bottom:10px; right:16px; left:auto; transform:none; flex-direction:row; align-items:center; gap:6px; animation:none; }
+  .item .name{ font-size:19px; white-space:normal; }
+  .menu{ padding:56px 18px 70px; }
 }
 @media (prefers-reduced-motion: reduce){
   html{ scroll-behavior:auto; }
   .reveal{ transition:none; opacity:1; transform:none; }
-  #chin-bob, .ear-l, .ear-r, #tail, #arm-l, #arm-r{ animation:none; }
+  .scroll-hint, .hole.up .chin{ animation:none; }
+  .hole .chin{ transition:none; }
 }
 </style>
 </head>
 <body>
 
-<!-- ================= SIDEBAR ================= -->
-<aside class="sidebar">
-  <div class="brand">
-    <div class="eyebrow">Academic profile</div>
-    <h1>Monse<br>Arriaga</h1>
-    <div class="role">Computer Science · UNAM</div>
+<!-- ================= EL PUESTO ================= -->
+<header class="hero" id="home">
+  <div class="sign">
+    <span class="who">Monse Arriaga · Computer Science · UNAM</span>
+  </div>
+  <div class="stand" id="stand">
+    <img src="tacos.png" alt="Hand-drawn taco stand: Tacos de Guisado, with a trompo, a Coca-Cola fridge, a TV and a green stool" draggable="false">
+
+    <!-- lo que va escrito en la pizarra debajo de "MENU:" -->
+    <nav class="board" aria-label="Menu">
+      <ul>
+        <li><a href="#home-menu">Home</a><span class="dots"></span><span class="price">$ 1</span></li>
+        <li><a href="#about">About</a><span class="dots"></span><span class="price">$ 2</span></li>
+        <li><a href="#projects">Projects</a><span class="dots"></span><span class="price">$ 3</span></li>
+        <li><a href="#cv">CV</a><span class="dots"></span><span class="price">$ 4</span></li>
+        <li><a href="#timeline">Timeline</a><span class="dots"></span><span class="price">$ 5</span></li>
+        <li><a href="#contact">Contact</a><span class="dots"></span><span class="price">$ 6</span></li>
+      </ul>
+    </nav>
+
+    <!-- la tele: reproduce los videos de la lista PLAYLIST (ver script); clic = siguiente canal -->
+    <div class="tv" id="tv" title="Click to change the channel">
+      <video id="tvVideo" muted autoplay playsinline preload="metadata"></video>
+      <img id="tvImg" alt="" draggable="false">
+      <div class="static">NO SIGNAL<br>drop your videos<br>in /videos</div>
+      <div class="label" id="tvLabel"></div>
+    </div>
+
+    <!-- la chinchilla; el JS la mueve entre "agujeros" -->
+    <div class="hole" id="hole" aria-hidden="true">
+      <img class="chin" id="chin" src="chinchilla.png" alt="" draggable="false" title="Feed me a taco!">
+    </div>
   </div>
 
-  <div class="nav-wrap">
-    <div class="chin-holder" aria-hidden="true">
-      <svg viewBox="0 0 180 210" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <radialGradient id="fur" cx="38%" cy="32%" r="80%">
-            <stop offset="0%" stop-color="#ccc1c9"/>
-            <stop offset="60%" stop-color="#b0a6ae"/>
-            <stop offset="100%" stop-color="#948a90"/>
-          </radialGradient>
-          <radialGradient id="belly" cx="50%" cy="35%" r="75%">
-            <stop offset="0%" stop-color="#f4eef2"/>
-            <stop offset="100%" stop-color="#e3dae0"/>
-          </radialGradient>
-        </defs>
+  <div class="tacos-fed" id="fed">🌮 tacos fed · <b id="fedCount">0</b></div>
 
-        <g id="chin-lean">
-          <g id="chin-bob">
-          <g id="chin-react">
-            <!-- shadow -->
-            <ellipse cx="90" cy="197" rx="44" ry="7" fill="#2b2630" opacity="0.12"/>
+  <a class="scroll-hint" href="#menu">see the menu <span>↓</span></a>
+</header>
 
-            <!-- fluffy tail -->
-            <g id="tail">
-              <circle cx="46" cy="158" r="16" fill="#9d929a"/>
-              <circle cx="37" cy="138" r="14" fill="#b0a6ae"/>
-              <circle cx="40" cy="118" r="11" fill="#bcb2ba"/>
-            </g>
+<!-- ================= EL MENÚ ================= -->
+<main class="menu" id="menu">
+  <div class="sheet">
 
-            <!-- body -->
-            <ellipse cx="90" cy="142" rx="48" ry="50" fill="url(#fur)"/>
-            <!-- feet -->
-            <ellipse cx="73" cy="184" rx="13" ry="8" fill="#9d929a"/>
-            <ellipse cx="107" cy="184" rx="13" ry="8" fill="#9d929a"/>
-            <!-- belly -->
-            <ellipse cx="90" cy="150" rx="28" ry="34" fill="url(#belly)"/>
-            <!-- arms -->
-            <g id="arm-l"><ellipse cx="63" cy="150" rx="8" ry="13" fill="#a59aa1"/></g>
-            <g id="arm-r"><ellipse cx="117" cy="150" rx="8" ry="13" fill="#a59aa1"/></g>
-
-            <!-- ears -->
-            <g class="ear ear-l">
-              <ellipse cx="63" cy="44" rx="15" ry="20" fill="#a59aa1" transform="rotate(-12 63 44)"/>
-              <ellipse cx="64" cy="46" rx="8" ry="12" fill="#e3a6ae" transform="rotate(-12 64 46)"/>
-            </g>
-            <g class="ear ear-r">
-              <ellipse cx="117" cy="44" rx="15" ry="20" fill="#a59aa1" transform="rotate(12 117 44)"/>
-              <ellipse cx="116" cy="46" rx="8" ry="12" fill="#e3a6ae" transform="rotate(12 116 46)"/>
-            </g>
-
-            <!-- head -->
-            <circle cx="90" cy="78" r="46" fill="url(#fur)"/>
-
-            <!-- cheeks -->
-            <ellipse cx="62" cy="92" rx="9" ry="5.5" fill="#e3a6ae" opacity="0.55"/>
-            <ellipse cx="118" cy="92" rx="9" ry="5.5" fill="#e3a6ae" opacity="0.55"/>
-
-            <!-- eyes -->
-            <g id="eyes">
-              <ellipse id="scleraL" cx="73" cy="76" rx="11" ry="13" fill="#fff"/>
-              <ellipse id="scleraR" cx="107" cy="76" rx="11" ry="13" fill="#fff"/>
-              <g id="pupilL">
-                <circle cx="73" cy="78" r="6.5" fill="#2b2228"/>
-                <circle cx="75.4" cy="75" r="2.1" fill="#fff"/>
-              </g>
-              <g id="pupilR">
-                <circle cx="107" cy="78" r="6.5" fill="#2b2228"/>
-                <circle cx="109.4" cy="75" r="2.1" fill="#fff"/>
-              </g>
-            </g>
-
-            <!-- happy eyes (while eating) -->
-            <path class="happy-eye" d="M64 75 q9 9 18 0" stroke="#2b2228" stroke-width="3" fill="none" stroke-linecap="round"/>
-            <path class="happy-eye" d="M98 75 q9 9 18 0" stroke="#2b2228" stroke-width="3" fill="none" stroke-linecap="round"/>
-
-            <!-- nose & mouth -->
-            <ellipse id="nose" cx="90" cy="93" rx="4" ry="3" fill="#d98e98"/>
-            <path d="M90 96 q-4 5 -8 2 M90 96 q4 5 8 2" stroke="#7d6470" stroke-width="1.6" fill="none" stroke-linecap="round"/>
-
-            <!-- whiskers -->
-            <g stroke="#ffffff" stroke-width="1.3" opacity="0.7" stroke-linecap="round">
-              <line x1="84" y1="94" x2="52" y2="90"/>
-              <line x1="84" y1="97" x2="52" y2="99"/>
-              <line x1="96" y1="94" x2="128" y2="90"/>
-              <line x1="96" y1="97" x2="128" y2="99"/>
-            </g>
-          </g>
-          </g>
-        </g>
-      </svg>
+    <div class="menu-title reveal">
+      <h2>MENÚ</h2>
+      <div class="sub">Tacos de Guisado · served by Monse Arriaga</div>
+      <div class="note">questions welcome · no cards accepted</div>
     </div>
 
-    <ul class="nav">
-      <li><a href="#home" class="active"><span class="dot"></span>Home</a></li>
-      <li><a href="#about"><span class="dot"></span>About</a></li>
-      <li><a href="#cv"><span class="dot"></span>CV</a></li>
-      <li><a href="#timeline"><span class="dot"></span>Timeline</a></li>
-      <li><a href="#contact"><span class="dot"></span>Contact</a></li>
-    </ul>
+    <!-- ---- 01 De la casa (Home) ---- -->
+    <section class="course reveal" id="home-menu">
+      <div class="course-head">
+        <span class="num">01</span>
+        <h3>Home <em>· house special</em></h3>
+        <span class="tag">Hi 👋</span>
+      </div>
+
+      <div class="item"><span class="name">Intro taco</span><span class="dots"></span><span class="price">$ 1 min</span></div>
+      <p class="desc">I'm Monse Arriaga, and I study how intelligent systems <em>learn, reason, and see the world</em>. I'm a Computer Science student at the National Autonomous University of Mexico (UNAM), fascinated by how machines learn to perceive and make sense of the world. My work moves between academia and industry: research collaborations on one side, practical technology projects on the other, and I'm happiest working somewhere in that overlap.</p>
+
+      <div class="item"><span class="name">Taco of things I like</span><span class="dots"></span><span class="price">$ 2 min</span></div>
+      <p class="desc">I'm especially drawn to computer vision, multimodal AI, world models, and representation learning, along with the trickier question of whether we can really trust and interpret what these systems do. I also study English Literature, which keeps me thinking about language and meaning from a completely different direction.</p>
+
+      <div class="item"><span class="name">What I'm cooking</span><span class="dots"></span><span class="price">$ time</span></div>
+      <p class="desc">I’m interested in building projects that don’t only answer a scientific question but also, in some way, tell a story. World model benchmarks generate thousands of videos that are expensive to make, often evaluated by hand, and that nobody really uses afterwards. I would like the datasets and the information I generate to create a story and that outlives the question that produced it.</p>
+      <p class="desc">Right now the question I care about is time: change over time and its periodicity. How time works inside world models, which structures help them count and keep a period, and how time-related hallucinations live inside the model’s virtual world.</p>
+
+      <div class="item"><span class="name">After-work taco</span><span class="dots"></span><span class="price">$ 1 book</span></div>
+      <p class="desc">Outside of research I like playing video games, mostly <em>LEGO Batman</em>, <em>Disco Elysium</em> and <em>Baldur's Gate</em>. When there's nothing to do I read, and I like taking care of my chinchilla.</p>
+    </section>
+
+    <!-- ---- 02 Guisados (About) ---- -->
+    <section class="course reveal" id="about">
+      <div class="course-head">
+        <span class="num">02</span>
+        <h3>About <em>· the guisados</em></h3>
+      </div>
+
+      <div class="item"><span class="name">Guisado of my path so far</span><span class="dots"></span><span class="price">$ research + industry</span></div>
+      <p class="desc">Throughout my academic journey, I have combined research, industry experience, and international collaborations. I have participated in research projects in artificial intelligence and computational modeling, completed international programs in Japan and Singapore, contributed to scientific publications, and worked in technology and data roles in industry.</p>
+      <p class="desc">These experiences have strengthened my interest in advancing AI research and pursuing graduate studies at leading research institutions.</p>
+
+      <div class="item"><span class="name">Ingredients</span><span class="dots"></span><span class="price">$ to taste</span></div>
+      <div class="ingredients">
+        <span>Computer Vision</span>
+        <span>Multimodal AI</span>
+        <span>World Models</span>
+        <span>Representation Learning</span>
+        <span>Interpretability</span>
+      </div>
+    </section>
+
+    <!-- ---- 03 Special menu (Projects) ----
+         Cada .dish es un proyecto. Para agregar uno: copia un <article class="dish">,
+         cambia título, descripción, chips y el href del botón "Try the demo".
+         Quita la clase "soon" cuando el demo ya esté en línea. -->
+    <section class="course reveal" id="projects">
+      <div class="course-head">
+        <span class="num">03</span>
+        <h3>Special menu <em>· what's cooking</em></h3>
+        <span class="tag">live demos of current projects</span>
+      </div>
+      <div class="dishes">
+        <article class="dish">
+          <div class="dish-top">
+            <h4>Bluebird in the Wild</h4>
+            <span class="status">now serving</span>
+          </div>
+          <p>Benchmarking AI systems in real-world conditions. Extended version accepted at ICPR 2026; earlier version at the CVPR LatinX Workshop.</p>
+          <div class="dish-tags"><span>Computer Vision</span><span>Benchmarks</span></div>
+          <div class="dish-actions"><a class="btn btn-sm" href="#" data-channel="0">📺 Watch on the TV</a></div>
+        </article>
+        <article class="dish">
+          <div class="dish-top">
+            <h4>Worlds in Slow Motion</h4>
+            <span class="status">in progress</span>
+          </div>
+          <p>Do video world models respond to a physical event, or do they just keep the scene moving? We filmed real, calibrated experiments (falls, collisions, ramps, pendulums), showed the models the moment right before the event, and measured what they generated against what actually happened. First results with four models. The next round needs more prompts, more seeds and more human annotation, which means more compute and more people.</p>
+          <div class="dish-tags"><span>World Models</span><span>Physics</span><span>Benchmarks</span></div>
+          <!-- cuando puedas enlazar el preprint, agrega: <a class="btn btn-sm btn-ghost" href="URL_ARXIV" target="_blank" rel="noopener">Preprint →</a> -->
+          <div class="dish-actions"><a class="btn btn-sm" href="#" data-channel="1">📺 Watch on the TV</a></div>
+        </article>
+        <article class="dish">
+          <div class="dish-top">
+            <h4>Keeping time</h4>
+            <span class="status">in preparation</span>
+          </div>
+          <p>Can a video model keep time when you ask it to? A benchmark that measures it frame by frame across several current image-to-video models, with a human check on the automatic measurement. Paper in preparation, not on arXiv yet.</p>
+          <div class="dish-tags"><span>World Models</span><span>Video Generation</span><span>Time</span></div>
+          <div class="dish-actions"><a class="btn btn-sm" href="#" data-channel="2">📺 Watch on the TV</a></div>
+        </article>
+        <article class="dish">
+          <div class="dish-top">
+            <h4>Adversarial poetry contest</h4>
+            <span class="status">call for entries soon</span>
+          </div>
+          <p>Can a poem break a language model? A contest I'm organizing where every entry is a poem written to make a model do what it shouldn't. Rules and dates coming soon.</p>
+          <div class="dish-tags"><span>Poetry</span><span>Jailbreaks</span><span>English Literature</span></div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ---- 04 CV ---- -->
+    <section class="course reveal" id="cv">
+      <div class="course-head">
+        <span class="num">04</span>
+        <h3>CV <em>· to go</em></h3>
+      </div>
+      <div class="item"><span class="name">Full CV order</span><span class="dots"></span><span class="price">$ 1 PDF</span></div>
+      <p class="desc">The full version, with publications, education, experience, and references.</p>
+      <div class="takeaway">
+        <div class="meta">PDF · <b>Last updated June 2026</b></div>
+        <a class="btn" href="cv.pdf" download>🌮 Download CV</a>
+      </div>
+    </section>
+
+    <!-- ---- 04 Del día (Timeline) ---- -->
+    <section class="course reveal" id="timeline">
+      <div class="course-head">
+        <span class="num">05</span>
+        <h3>Timeline <em>· today's orders</em></h3>
+        <span class="tag">recent activity</span>
+      </div>
+      <div class="orders">
+        <div class="order">
+          <div class="when">AUGUST 2026 · PRESENT</div>
+          <h4>Analyst, Software Engineering · BlackRock</h4>
+          <p>Full-stack development for Aladdin, BlackRock's investment platform.</p>
+        </div>
+        <div class="order">
+          <div class="when">JUNE 2026</div>
+          <h4>Publication accepted at CLEF</h4>
+          <p>Contributed to a CLEF paper on natural language processing and information retrieval, written together with collaborators.</p>
+        </div>
+        <div class="order">
+          <div class="when">JUNE 2026</div>
+          <h4>Paper accepted at ICPR 2026</h4>
+          <p>An extended version of the Bluebird project, with additional experiments and analyses, was accepted at the International Conference on Pattern Recognition (ICPR 2026).</p>
+        </div>
+        <div class="order">
+          <div class="when">JUNE 2026</div>
+          <h4>Accepted to the CVPR LatinX Workshop</h4>
+          <p>With “Towards Benchmarking the Bluebird in the Wild,” a work focused on evaluating and benchmarking AI systems in the real world.</p>
+        </div>
+        <div class="order">
+          <div class="when">2025</div>
+          <h4>Completed my Computer Science degree · UNAM</h4>
+          <p>Finished my undergraduate studies in Computer Science at the National Autonomous University of Mexico.</p>
+        </div>
+        <div class="order">
+          <div class="when">JUNE TO AUGUST 2025</div>
+          <h4>Research Intern · National University of Singapore (NUS)</h4>
+          <p>Conducted extensive NLP research on political discourse using embeddings from transformer models, clustering algorithms, and representation learning techniques.</p>
+        </div>
+        <div class="order">
+          <div class="when">2024 TO 2025</div>
+          <h4>Software Cybersecurity Engineer · Honeywell</h4>
+          <p>Developed automation and cybersecurity solutions for industrial and aerospace applications.</p>
+        </div>
+        <div class="order">
+          <div class="when">2024</div>
+          <h4>AI Internship in Japan · METI Program (AWL Inc.)</h4>
+          <p>Completed an internship focused on AI through the METI Government Internship Program, developing performance analysis and monitoring tools for edge AI systems at AWL Inc.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---- 05 La cuenta (Contact) ---- -->
+    <section class="course reveal" id="contact">
+      <div class="course-head">
+        <span class="num">06</span>
+        <h3>Contact <em>· the bill</em></h3>
+      </div>
+      <div class="contact-links">
+        <a href="mailto:monse_arriaga@ciencias.unam.mx">monse_arriaga@ciencias.unam.mx</a>
+        <a href="https://github.com/monse-arriaga" target="_blank" rel="noopener">github.com/monse-arriaga</a>
+        <a href="https://orcid.org/0009-0006-5458-2546" target="_blank" rel="noopener">orcid.org/0009-0006-5458-2546</a>
+      </div>
+      <div class="foot">© 2026 Monse Arriaga · Made with 🐭 and 🌮 on GitHub Pages</div>
+    </section>
+
   </div>
-
-  <button class="treat" id="treatBtn" aria-label="Give the chinchilla a treat">
-    <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5.5 6 5.5c2 0 3.2 1.2 4 2.3.8-1.1 2-2.3 4-2.3 3.5 0 5 3.5 3.5 6.5C19 16.5 12 21 12 21z" fill="#b9824f"/></svg>
-    Feed the chinchilla · <span class="count" id="treatCount">0</span>
-  </button>
-
-  <div class="social">
-    <a href="mailto:monse_arriaga@ciencias.unam.mx">Email</a>
-    <a href="https://github.com/monse-arriaga" target="_blank" rel="noopener">GitHub</a>
-    <a href="https://orcid.org/0009-0006-5458-2546" target="_blank" rel="noopener">ORCID</a>
-  </div>
-</aside>
-
-<!-- ================= CONTENT ================= -->
-<main class="content">
-
-  <section id="home">
-    <div class="eyebrow reveal">Hi 👋</div>
-    <h2 class="reveal">I'm Monse Arriaga, and I study how intelligent systems <span class="hl">learn, reason, and see the world</span>.</h2>
-    <p class="lead reveal">I'm a Computer Science student at the National Autonomous University of Mexico (UNAM), fascinated by how machines learn to perceive and make sense of the world. My work moves between academia and industry: research collaborations on one side, practical technology projects on the other, and I'm happiest working somewhere in that overlap.</p>
-    <p class="lead reveal">I'm especially drawn to computer vision, multimodal AI, world models, and representation learning, along with the trickier question of whether we can really trust and interpret what these systems do. I also study English Literature, which keeps me thinking about language and meaning from a completely different direction.</p>
-    <p class="lead reveal">Outside of research I read a lot. <em>Frankenstein</em> is my favorite, which feels fitting for someone who spends her days thinking about artificial minds, and when I'm not reading I'm usually deep in a long playthrough of <em>Baldur's Gate</em>.</p>
-  </section>
-
-  <section id="about">
-    <div class="eyebrow reveal">01 · About</div>
-    <h3 class="reveal">A bit of context</h3>
-    <div class="prose reveal">
-      <p>Throughout my academic journey, I have combined research, industry experience, and international collaborations. I have participated in research projects in artificial intelligence and computational modeling, completed international programs in Japan and Singapore, contributed to scientific publications, and worked in technology and data roles in industry.</p>
-      <p>These experiences have strengthened my interest in advancing AI research and pursuing graduate studies at leading research institutions.</p>
-    </div>
-    <div class="chips reveal">
-      <span class="chip">Computer Vision</span>
-      <span class="chip">Multimodal AI</span>
-      <span class="chip">World Models</span>
-      <span class="chip">Representation Learning</span>
-      <span class="chip">Interpretability</span>
-    </div>
-  </section>
-
-  <section id="cv">
-    <div class="eyebrow reveal">02 · Résumé</div>
-    <h3 class="reveal">Download my CV</h3>
-    <p class="prose reveal" style="color:var(--muted);max-width:58ch;margin-bottom:26px;">
-      The full version, with publications, education, experience, and references.
-    </p>
-    <div class="cv-card reveal">
-      <div class="meta">PDF · <strong>Last updated June 2026</strong></div>
-      <a class="btn" href="cv.pdf" download>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/></svg>
-        Download CV
-      </a>
-    </div>
-  </section>
-
-  <section id="timeline">
-    <div class="eyebrow reveal">03 · Timeline</div>
-    <h3 class="reveal">Recent activity</h3>
-    <div class="timeline">
-      <div class="event reveal">
-        <div class="when">June 2026</div>
-        <h4>Publication accepted at CLEF</h4>
-        <p>Contributed to a CLEF paper on natural language processing and information retrieval, written together with collaborators.</p>
-      </div>
-      <div class="event reveal">
-        <div class="when">June 2026</div>
-        <h4>Paper accepted at ICPR 2026</h4>
-        <p>An extended version of the Bluebird project, with additional experiments and analyses, was accepted at the International Conference on Pattern Recognition (ICPR 2026).</p>
-      </div>
-      <div class="event reveal">
-        <div class="when">June 2026</div>
-        <h4>Accepted to the CVPR LatinX Workshop</h4>
-        <p>With “Towards Benchmarking the Bluebird in the Wild,” a work focused on evaluating and benchmarking AI systems in the real world.</p>
-      </div>
-      <div class="event reveal">
-        <div class="when">2025</div>
-        <h4>Completed my Computer Science degree · UNAM</h4>
-        <p>Finished my undergraduate studies in Computer Science at the National Autonomous University of Mexico.</p>
-      </div>
-      <div class="event reveal">
-        <div class="when">June to August 2025</div>
-        <h4>Research Intern · National University of Singapore (NUS)</h4>
-        <p>Conducted extensive NLP research on political discourse using embeddings from transformer models, clustering algorithms, and representation learning techniques.</p>
-      </div>
-      <div class="event reveal">
-        <div class="when">2024 to 2025</div>
-        <h4>Software Cybersecurity Engineer · Honeywell</h4>
-        <p>Developed automation and cybersecurity solutions for industrial and aerospace applications.</p>
-      </div>
-      <div class="event reveal">
-        <div class="when">2024</div>
-        <h4>AI Internship in Japan · METI Program (AWL Inc.)</h4>
-        <p>Completed an internship focused on AI through the METI Government Internship Program, developing performance analysis and monitoring tools for edge AI systems at AWL Inc.</p>
-      </div>
-    </div>
-  </section>
-
-  <section id="contact">
-    <div class="eyebrow reveal">04 · Contact</div>
-    <h3 class="reveal">Let's talk</h3>
-    <div class="contact-links reveal">
-      <a href="mailto:monse_arriaga@ciencias.unam.mx">monse_arriaga@ciencias.unam.mx</a>
-      <a href="https://github.com/monse-arriaga" target="_blank" rel="noopener">github.com/monse-arriaga</a>
-      <a href="https://orcid.org/0009-0006-5458-2546" target="_blank" rel="noopener">orcid.org/0009-0006-5458-2546</a>
-    </div>
-    <div class="foot">© 2026 Monse Arriaga · Made with 🐭 and GitHub Pages</div>
-  </section>
-
 </main>
 
 <script>
 (function(){
-  const holder   = document.querySelector('.chin-holder');
-  const navWrap  = document.querySelector('.nav-wrap');
-  const links    = Array.from(document.querySelectorAll('.nav a'));
-  const lean     = document.getElementById('chin-lean');
-  const eyes     = document.getElementById('eyes');
-  const pupilL   = document.getElementById('pupilL');
-  const pupilR   = document.getElementById('pupilR');
-  const scleraL  = document.getElementById('scleraL');
-  const scleraR  = document.getElementById('scleraR');
-  const svgEl    = holder.querySelector('svg');
-  const reduce   = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // ---------- 1) nav always scrolls within the page ----------
-  links.forEach(link=>{
-    link.addEventListener('click', e=>{
-      const id = link.getAttribute('href');
-      const target = document.querySelector(id);
-      if(target){
-        e.preventDefault();
-        target.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block:'start' });
-        history.replaceState(null, '', id);
-      }
+  /* ---------- 0) la tele: videos en bucle, uno tras otro ---------- */
+  // Pon tus archivos en una carpeta videos/ junto al index.html y lista aquí cada uno.
+  // Formatos que corren en todos los navegadores: .mp4 (H.264) o .webm. Muted para que el autoplay funcione.
+  const PLAYLIST = [
+    { img:'videos/bluebird.jpg', seconds:9,  title:'Bluebird in the Wild' },   // foto: se muestra 'seconds' y pasa al siguiente
+    { src:'videos/slow-motion.mp4',          title:'Worlds in Slow Motion' },
+    { src:'videos/keeping-time.mp4',         title:'Keeping time' },
+  ];
+  const tv = document.getElementById('tv'), tvVideo = document.getElementById('tvVideo'),
+        tvImg = document.getElementById('tvImg'), tvLabel = document.getElementById('tvLabel');
+  let channel = -1, failed = 0, photoTimer = null;
+  function tune(i){
+    if(!PLAYLIST.length){ tv.classList.add('nosignal'); return; }
+    clearTimeout(photoTimer);
+    channel = (i + PLAYLIST.length) % PLAYLIST.length;
+    const v = PLAYLIST[channel];
+    tv.classList.remove('nosignal');
+    tvLabel.textContent = v.title || '';
+    if(v.img){
+      tv.classList.add('photo');
+      tvVideo.pause(); tvVideo.removeAttribute('src');
+      tvImg.src = v.img;
+      photoTimer = setTimeout(()=> tune(channel + 1), (v.seconds || 8) * 1000);
+    } else {
+      tv.classList.remove('photo');
+      tvVideo.src = v.src;
+      tvVideo.play().catch(()=>{});
+    }
+  }
+  tvVideo.addEventListener('ended', ()=> tune(channel + 1));
+  tvVideo.addEventListener('error', ()=>{
+    if(!tvVideo.getAttribute('src')) return;
+    failed++;
+    if(failed >= PLAYLIST.length){ tv.classList.add('nosignal'); tvLabel.textContent=''; return; }
+    tune(channel + 1);
+  });
+  tvImg.addEventListener('error', ()=>{ failed++; if(failed < PLAYLIST.length) tune(channel + 1); });
+  tvVideo.addEventListener('playing', ()=>{ failed = 0; });
+  tvImg.addEventListener('load', ()=>{ failed = 0; });
+  tv.addEventListener('click', ()=> tune(channel + 1));
+  tune(0);
+  // botones "Watch on the TV" en el menú especial
+  document.querySelectorAll('[data-channel]').forEach(b=>{
+    b.addEventListener('click', e=>{
+      e.preventDefault();
+      tune(parseInt(b.dataset.channel, 10));
+      document.getElementById('home').scrollIntoView({behavior: reduce?'auto':'smooth'});
     });
   });
 
-  // ---------- 2) chinchilla slides to the active/hovered option ----------
-  let activeIndex = 0, hoverIndex = -1;
-  const isMobile = () => window.innerWidth <= 880;
+  /* ---------- 1) la chinchilla se asoma por el puesto ---------- */
+  // Cada "agujero": x,y = esquina inferior-centro del agujero en % del dibujo; w = ancho en % del dibujo.
+  // Como el .hole tiene overflow:hidden, ella sube desde abajo del borde y parece salir de atrás de algo.
+  const SPOTS = [
+    { x:59, y:53,  w:15, flip:false }, // detrás del mostrador, en medio
+    { x:31, y:49,  w:12, flip:true  }, // al lado del trompo
+    { x:77, y:42,  w:14, flip:false }, // dentro de la tele
+    { x:24, y:62,  w:14, flip:false }, // arriba del banco verde
+    { x:94, y:52,  w:14, flip:true  }, // esquina derecha del mostrador
+    { x:96, y:97,  w:14, flip:false }, // debajo del puesto, abajo a la derecha
+    { x:12, y:94,  w:14, flip:true  }, // debajo del puesto, abajo a la izquierda
+    { x:74, y:53,  w:12, flip:false }, // frente a la tele, detrás del mostrador
+    { x:3, y:21,  w:9,  flip:true  }, // esquina vacía del letrero, antes de la T
+    { x:3, y:60,  w:11,  flip:false }, // en la orilla izquierda del mostrador
+  ];
+  const stand = document.getElementById('stand');
+  const hole  = document.getElementById('hole');
+  const chin  = document.getElementById('chin');
+  const CHIN_RATIO = 483/678;           // alto/ancho del png
+  let current = -1, timer = null;
 
-  function placeChin(){
-    if(isMobile()){ holder.style.transform = ''; return; }
-    const i = hoverIndex >= 0 ? hoverIndex : activeIndex;
-    const wrapRect = navWrap.getBoundingClientRect();
-    const lr = links[i].getBoundingClientRect();
-    const centerPx = (lr.top + lr.height/2) - wrapRect.top;
-    const y = centerPx - holder.offsetHeight/2;
-    holder.style.transform = 'translateY(' + y + 'px)';
+  function placeHole(i){
+    const s = SPOTS[i];
+    const W = stand.clientWidth, H = stand.clientHeight;
+    const scale = window.innerWidth <= 700 ? 1.6 : 1;   // más grande en celular para poder atraparla
+    const w = W * s.w/100 * scale, h = w * CHIN_RATIO;
+    hole.style.width  = w + 'px';
+    hole.style.height = h + 'px';
+    hole.style.left   = (W * s.x/100) + 'px';
+    hole.style.top    = (H * s.y/100 - h) + 'px';
+    hole.classList.toggle('flip', !!s.flip);
   }
-  links.forEach((link, i)=>{
-    link.addEventListener('mouseenter', ()=>{ hoverIndex = i; placeChin(); });
-    link.addEventListener('mouseleave', ()=>{ hoverIndex = -1; placeChin(); });
-    link.addEventListener('focus',      ()=>{ hoverIndex = i; placeChin(); });
-    link.addEventListener('blur',       ()=>{ hoverIndex = -1; placeChin(); });
-  });
-
-  // scrollspy
-  const sections = links.map(l=> document.querySelector(l.getAttribute('href')));
-  const spy = new IntersectionObserver(entries=>{
-    entries.forEach(e=>{
-      if(e.isIntersecting){
-        const idx = sections.indexOf(e.target);
-        if(idx>=0){
-          activeIndex = idx;
-          links.forEach(l=> l.classList.remove('active'));
-          links[idx].classList.add('active');
-          placeChin();
-        }
-      }
-    });
-  }, { rootMargin:'-45% 0px -45% 0px', threshold:0 });
-  sections.forEach(s=> s && spy.observe(s));
-
-  // ---------- 3) eyes + body follow the cursor ----------
-  let px = window.innerWidth*0.5, py = window.innerHeight*0.4;
-  let curLX=0, curLY=0, curRX=0, curRY=0, curLean=0;
-  const MAX = 3.4;
-
-  window.addEventListener('mousemove', e=>{ px = e.clientX; py = e.clientY; });
-
-  function pupilOffset(scleraEl){
-    const r = scleraEl.getBoundingClientRect();
-    const cx = r.left + r.width/2, cy = r.top + r.height/2;
-    const ang = Math.atan2(py - cy, px - cx);
-    const d = Math.min(1, Math.hypot(px-cx, py-cy)/220);
-    return { x: Math.cos(ang)*MAX*d, y: Math.sin(ang)*MAX*d };
+  function nextSpot(){
+    let i; do { i = Math.floor(Math.random()*SPOTS.length); } while(i === current && SPOTS.length > 1);
+    return i;
   }
-
-  function loop(){
-    requestAnimationFrame(loop);
-    const oL = pupilOffset(scleraL), oR = pupilOffset(scleraR);
-    curLX += (oL.x-curLX)*0.18; curLY += (oL.y-curLY)*0.18;
-    curRX += (oR.x-curRX)*0.18; curRY += (oR.y-curRY)*0.18;
-    pupilL.setAttribute('transform','translate('+curLX.toFixed(2)+' '+curLY.toFixed(2)+')');
-    pupilR.setAttribute('transform','translate('+curRX.toFixed(2)+' '+curRY.toFixed(2)+')');
-    const sr = svgEl.getBoundingClientRect();
-    const scx = sr.left + sr.width/2;
-    const targetLean = Math.max(-7, Math.min(7, (px - scx)/22));
-    curLean += (targetLean-curLean)*0.08;
-    lean.setAttribute('transform','rotate('+curLean.toFixed(2)+' 90 200)');
+  function popUp(){
+    current = nextSpot();
+    placeHole(current);
+    hole.classList.remove('down');
+    requestAnimationFrame(()=> requestAnimationFrame(()=> hole.classList.add('up')));
+    timer = setTimeout(popDown, 2300 + Math.random()*1800);
   }
-  if(!reduce) loop();
-
-  // ---------- 4) blinking ----------
-  function blink(){
-    eyes.classList.add('blink');
-    setTimeout(()=> eyes.classList.remove('blink'), 130);
-    setTimeout(blink, 2200 + Math.random()*3200);
+  function popDown(){
+    hole.classList.add('down');
+    hole.classList.remove('up');
+    timer = setTimeout(popUp, 500 + Math.random()*900);
   }
-  if(!reduce) setTimeout(blink, 1500);
+  if(reduce){
+    current = 0; placeHole(0); hole.classList.add('up');
+  } else {
+    setTimeout(popUp, 700);
+  }
+  window.addEventListener('resize', ()=>{ if(current>=0) placeHole(current); });
 
-  // ---------- 5) scroll reveal ----------
-  const revealer = new IntersectionObserver(entries=>{
-    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); revealer.unobserve(e.target); }});
-  }, { threshold:0.12 });
-  document.querySelectorAll('.reveal').forEach(el=> revealer.observe(el));
+  /* ---------- 2) darle un taco cuando la atrapas ---------- */
+  const fedCount = document.getElementById('fedCount');
+  const fedBox   = document.getElementById('fed');
+  let fed = 0, busy = false;
 
-  // ---------- 6) feed her a heart-shaped treat ----------
-  const treatBtn   = document.getElementById('treatBtn');
-  const treatCount = document.getElementById('treatCount');
-  const react      = document.getElementById('chin-react');
-  const nose       = document.getElementById('nose');
-  let count = 0, feeding = false;
+  chin.addEventListener('click', ()=>{
+    if(busy || !hole.classList.contains('up')) return;
+    busy = true;
+    clearTimeout(timer);                      // se queda a comer
 
-  const KIBBLE = '<svg viewBox="0 0 24 24" width="22" height="22"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5.5 6 5.5c2 0 3.2 1.2 4 2.3.8-1.1 2-2.3 4-2.3 3.5 0 5 3.5 3.5 6.5C19 16.5 12 21 12 21z" fill="#b9824f"/></svg>';
-  const HEART  = '<svg viewBox="0 0 24 24" width="16" height="16"><path d="M12 21s-7-4.5-9.5-9C1 9 2.5 5.5 6 5.5c2 0 3.2 1.2 4 2.3.8-1.1 2-2.3 4-2.3 3.5 0 5 3.5 3.5 6.5C19 16.5 12 21 12 21z" fill="#e3a6ae"/></svg>';
+    const from = fedBox.getBoundingClientRect();
+    const to   = chin.getBoundingClientRect();
+    const sx = from.left + from.width/2, sy = from.top + from.height/2;
+    const ex = to.left + to.width/2,     ey = to.top + to.height*0.6;
 
-  treatBtn.addEventListener('click', ()=>{
-    if(feeding) return;
-    feeding = true;
-    const b = treatBtn.getBoundingClientRect();
-    const n = nose.getBoundingClientRect();
-    const sx = b.left + b.width/2, sy = b.top + b.height/2;
-    const ex = n.left + n.width/2, ey = n.top + n.height/2;
-
-    const fly = document.createElement('div');
-    fly.className = 'kibble-fly';
-    fly.innerHTML = KIBBLE;
-    fly.style.left = (sx-11)+'px';
-    fly.style.top  = (sy-11)+'px';
-    document.body.appendChild(fly);
-    requestAnimationFrame(()=>{
-      fly.style.transform = 'translate('+(ex-sx)+'px,'+(ey-sy)+'px) rotate(360deg)';
-    });
+    const taco = document.createElement('div');
+    taco.className = 'fly'; taco.textContent = '🌮';
+    taco.style.left = (sx-13)+'px'; taco.style.top = (sy-13)+'px';
+    document.body.appendChild(taco);
+    requestAnimationFrame(()=>{ taco.style.transform = 'translate('+(ex-sx)+'px,'+(ey-sy)+'px) rotate(360deg)'; });
 
     setTimeout(()=>{
-      fly.style.opacity = '0';
-      setTimeout(()=> fly.remove(), 200);
+      taco.style.opacity = '0'; setTimeout(()=> taco.remove(), 200);
       if(!reduce){
-        react.classList.add('happy');
-        eyes.classList.add('hide');
-        setTimeout(()=>{ react.classList.remove('happy'); eyes.classList.remove('hide'); }, 650);
+        hole.classList.add('nom');
+        setTimeout(()=> hole.classList.remove('nom'), 520);
         for(let i=0;i<4;i++){
           const h = document.createElement('div');
-          h.className = 'heart-pop';
-          h.innerHTML = HEART;
-          h.style.left = (ex-8 + (Math.random()*30-15))+'px';
-          h.style.top  = (ey-12)+'px';
+          h.className = 'pop'; h.textContent = ['💗','🌮','💗','✨'][i];
+          h.style.left = (ex-9 + (Math.random()*36-18))+'px';
+          h.style.top  = (ey-20)+'px';
           h.style.animationDelay = (i*0.08)+'s';
           document.body.appendChild(h);
           setTimeout(()=> h.remove(), 1300 + i*80);
         }
       }
-      count++; treatCount.textContent = count;
-      feeding = false;
-    }, 600);
+      fed++; fedCount.textContent = fed;
+      busy = false;
+      timer = setTimeout(popDown, reduce ? 999999 : 900);
+    }, 550);
   });
 
-  window.addEventListener('resize', placeChin);
-  window.addEventListener('load', placeChin);
-  placeChin();
+  /* ---------- 3) links de la pizarra ---------- */
+  document.querySelectorAll('a[href^="#"]').forEach(a=>{
+    a.addEventListener('click', e=>{
+      const t = document.querySelector(a.getAttribute('href'));
+      if(t){ e.preventDefault(); t.scrollIntoView({behavior: reduce?'auto':'smooth', block:'start'}); history.replaceState(null,'',a.getAttribute('href')); }
+    });
+  });
+
+  /* ---------- 4) reveal al hacer scroll ---------- */
+  const revealer = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); revealer.unobserve(e.target); } });
+  }, { threshold:0.1 });
+  document.querySelectorAll('.reveal').forEach(el=> revealer.observe(el));
 })();
 </script>
 </body>
