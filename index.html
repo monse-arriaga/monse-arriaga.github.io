@@ -2,733 +2,656 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Monse Arriaga · Tacos de Guisado</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Monse Arriaga</title>
+<meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500&family=Patrick+Hand&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=VT323&display=swap" rel="stylesheet">
 <style>
+/* Layout: a room at night. Left: an old TV, the chinchilla on the floor with the remote.
+   Right: the listing for whatever channel is on. Below: a printed TV guide with every channel by name.
+   One deliberate dark look: the room is lit only by the screen. */
 :root{
-  /* paleta sacada del dibujo del puesto */
-  --sky:      #bfd0e2;   /* azul-gris del puesto */
-  --sky-2:    #a9bdd3;
-  --paper:    #f6f1e8;   /* papel del menú */
-  --card:     #fffdf8;
-  --ink:      #1f1f24;
-  --muted:    #6b6b73;
-  --yellow:   #f2d93b;
-  --orange:   #f2992e;
-  --red:      #e24b3b;
-  --green:    #2f8f4e;
-  --cola:     #8a3a1e;
-  --pink:     #f0b7c6;   /* orejas de la chinchilla */
-  --line:     rgba(31,31,36,.14);
-}
+  color-scheme: dark;
+  --wall:   #19202b;   /* room at night */
+  --ink:    #ece8df;
+  --muted:  #9ba2ae;
+  --line:   #2e3746;
+  --cab:    #37322d;   /* TV cabinet */
+  --cab-hi: #4a443d;
+  --paper:  #e4e1d9;   /* newsprint TV guide */
+  --paper-ink: #1d1d1f;
+  --tint:   #8fb3ff;   /* set per channel by script: colour of the glow */
 
+  --display: 'DM Serif Display', 'Iowan Old Style', Georgia, serif;
+  --body:    'Instrument Sans', system-ui, sans-serif;
+  --osd:     'VT323', ui-monospace, Menlo, monospace;
+}
 *{ box-sizing:border-box; margin:0; padding:0; }
+[hidden]{ display:none !important; }
 html{ scroll-behavior:smooth; }
 body{
-  font-family:'Patrick Hand', 'Fraunces', cursive;
-  background:var(--sky);
-  color:var(--ink);
-  line-height:1.5;
+  background:var(--wall); color:var(--ink);
+  font-family:var(--body); font-size:17px; line-height:1.6;
   -webkit-font-smoothing:antialiased;
 }
 a{ color:inherit; }
-img{ display:block; }
+img,video,canvas{ display:block; max-width:100%; }
+button{ font:inherit; color:inherit; }
+:focus-visible{ outline:2px solid var(--tint); outline-offset:3px; }
 
-/* ===================== HERO: EL PUESTO ===================== */
-.hero{
-  position:relative;
-  min-height:100svh;
-  display:flex; align-items:center; justify-content:center;
-  padding:0; overflow:hidden;
-  background:#6c7f8e url("street.jpg") center 60% / cover no-repeat;
+.room{
+  position:relative; min-height:100vh; overflow:hidden; overflow:clip; /* clip, not hidden, so the TV can stay sticky */
+  padding-left:max(20px, env(safe-area-inset-left, 0px));
+  padding-right:max(20px, env(safe-area-inset-right, 0px));
+  padding-block:28px 64px;
 }
-/* velo suave para que el dibujo se lea sobre la foto */
-.hero::before{
-  content:''; position:absolute; inset:0;
-  background:linear-gradient(180deg, rgba(20,30,40,.25), rgba(20,30,40,.08) 40%, rgba(20,30,40,.35));
-  pointer-events:none;
+/* the glow the screen throws on the wall */
+.room::before{
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(60% 55% at 72% 42%, color-mix(in srgb, var(--tint) 26%, transparent), transparent 70%);
+  transition:background .6s ease;
 }
-.stand{
-  position:relative;
-  width:min(92%, calc(100svh * 1300 / 1189 * .86));
-  aspect-ratio:1300 / 1189;
-  margin:0 auto;
-  filter:drop-shadow(0 18px 24px rgba(0,0,0,.35));
-  container-type:inline-size; /* el texto de la pizarra se mide contra el puesto, no contra la ventana */
-}
-.stand > img{
-  width:100%; height:100%; object-fit:contain;
-  user-select:none; -webkit-user-drag:none;
-}
+.inner{ position:relative; max-width:1240px; margin:0 auto; }
 
-/* nombre colgado en la esquina del hero, no sobre el dibujo */
-.sign{
-  position:absolute; left:18px; top:16px; z-index:3;
-  font-family:'Fraunces', serif; font-weight:700;
-  color:var(--ink); line-height:1;
-  pointer-events:none;
+/* ---------- header ---------- */
+.top{ display:flex; flex-wrap:wrap; align-items:baseline; gap:6px 22px; margin-bottom:28px; }
+.top h1{ font-family:var(--display); font-weight:400; font-size:clamp(34px, 4vw, 52px); line-height:1; }
+.top .line{ color:var(--muted); font-size:16px; flex:1 1 320px; }
+.top .links{ display:flex; flex-wrap:wrap; gap:8px; }
+.top .links a{
+  font-size:13.5px; text-decoration:none; padding:6px 13px; border:1px solid var(--line); border-radius:100px;
+  transition:border-color .15s, color .15s;
 }
-.sign .who{
-  font-family:'Space Mono', monospace; font-weight:700;
-  font-size:clamp(10px, 1vw, 13px); letter-spacing:.2em; text-transform:uppercase;
-  background:var(--yellow); padding:4px 8px; display:inline-block;
-  transform:rotate(-2deg); box-shadow:2px 2px 0 var(--ink);
+.top .links a:hover{ border-color:var(--tint); color:var(--tint); }
+.top .links a.primary{ background:var(--ink); color:var(--wall); border-color:var(--ink); }
+
+/* ---------- stage ---------- */
+/* text on the left, the TV on the right; the TV and remote stay in view while the text scrolls */
+.stage{ display:grid; grid-template-columns:minmax(0, 1fr) minmax(0, 1.12fr); gap:40px 56px; align-items:start; }
+.set{ position:relative; min-width:0; order:2; }
+@media (min-width: 901px) and (min-height: 640px){
+  .set{ position:sticky; top:20px; }
 }
 
-/* la "pizarra" de abajo: usa el espacio vacío debajo de MENU: */
-.board{
-  position:absolute; left:42%; top:68%; width:49%;
-  font-family:'Patrick Hand', cursive; font-size:clamp(12px, 1.75vw, 24px);
-  font-size:2.3cqw;
-  line-height:1.12; color:var(--ink);
-}
-.board ul{ list-style:none; }
-.board li{ display:flex; gap:.5em; align-items:baseline; }
-.board li a{ text-decoration:none; border-bottom:2px solid transparent; transition:border-color .2s; }
-.board li a:hover{ border-color:var(--red); }
-.board li .dots{ flex:1; border-bottom:2px dotted rgba(31,31,36,.45); transform:translateY(-.3em); }
-.board li .price{ font-family:'Space Mono', monospace; font-size:.72em; }
-
-.scroll-hint{
-  position:absolute; left:50%; bottom:14px; transform:translateX(-50%); z-index:3;
-  font-family:'Patrick Hand', cursive; font-size:18px; color:#fff; text-shadow:0 1px 3px rgba(0,0,0,.6);
-  display:flex; flex-direction:column; align-items:center; gap:2px;
-  text-decoration:none; opacity:.85;
-  animation:hint 2.4s ease-in-out infinite;
-}
-.scroll-hint span{ font-size:26px; line-height:1; }
-@keyframes hint{ 0%,100%{ transform:translate(-50%,0);} 50%{ transform:translate(-50%,6px);} }
-
-/* ---- contador de tacos ---- */
-.tacos-fed{
-  position:absolute; right:14px; top:14px; z-index:3;
-  font-family:'Space Mono', monospace; font-size:12px; letter-spacing:.04em;
-  background:var(--card); border:2px solid var(--ink); border-radius:100px;
-  padding:7px 14px; box-shadow:3px 3px 0 var(--ink);
-  display:flex; align-items:center; gap:8px;
-}
-.tacos-fed b{ color:var(--red); }
-
-/* ===================== LA TELE: videos de proyectos ===================== */
+/* the TV: a flat panel, glossy black bezel with a thin coloured rim, centre stand */
+.tvwrap{ position:relative; }
 .tv{
-  position:absolute; left:61.8%; top:26.6%; width:31%; height:15.4%;
-  transform:rotate(-.6deg); transform-origin:center;
-  border-radius:4% / 10%; overflow:hidden; background:#111;
-  box-shadow:inset 0 0 18px rgba(0,0,0,.6);
-  cursor:pointer;
+  position:relative; padding:2.1% 2.1% 3.4%; border-radius:9px;
+  background:linear-gradient(180deg, #17171a, #060607 60%, #0d0d0f);
+  box-shadow:
+    0 0 0 1.5px #5b1f27,
+    0 0 0 3px #0a0a0b,
+    0 46px 60px -34px rgba(0,0,0,.85),
+    inset 0 1px 0 rgba(255,255,255,.14);
 }
-.tv video{ width:100%; height:100%; object-fit:cover; display:block; background:#111; }
-.tv img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:none; }
-.tv.photo video{ display:none; }
-.tv.photo img{ display:block; animation:ken 12s ease-in-out infinite alternate; }
-@keyframes ken{ from{ transform:scale(1) translate(0,0);} to{ transform:scale(1.12) translate(-2%,2%);} }
-@media (prefers-reduced-motion: reduce){ .tv.photo img{ animation:none; } }
-.tv .static{
-  position:absolute; inset:0; display:none; align-items:center; justify-content:center; text-align:center;
-  color:#ddd; font-family:'Space Mono', monospace; font-size:clamp(8px, 1vw, 12px); line-height:1.3; letter-spacing:.05em;
-  background:
-    repeating-linear-gradient(0deg, rgba(255,255,255,.08) 0 1px, transparent 1px 3px),
-    radial-gradient(circle at 30% 40%, #777, #333 60%, #111);
-  animation:noise .25s steps(2) infinite;
-}
-.tv.nosignal .static{ display:flex; }
-.tv.nosignal video{ opacity:0; }
-@keyframes noise{ 0%{ background-position:0 0, 0 0;} 100%{ background-position:0 2px, 3px 0;} }
-.tv::after{ /* brillo de pantalla + líneas de barrido */
-  content:''; position:absolute; inset:0; pointer-events:none;
-  background:
-    repeating-linear-gradient(0deg, rgba(0,0,0,.12) 0 1px, transparent 1px 3px),
-    linear-gradient(115deg, rgba(255,255,255,.18), transparent 45%);
-}
-.tv .label{
-  position:absolute; left:4%; bottom:5%; max-width:92%;
-  font-family:'Space Mono', monospace; font-size:clamp(7px, .85vw, 11px); letter-spacing:.05em;
-  background:rgba(0,0,0,.65); color:#fff; padding:2px 6px; border-radius:3px;
-  white-space:nowrap; overflow:hidden; text-overflow:ellipsis; pointer-events:none;
-}
-@media (prefers-reduced-motion: reduce){ .tv .static{ animation:none; } }
+.tv .logo-led{ position:absolute; left:50%; bottom:1.2%; width:5px; height:5px; margin-left:-2.5px; border-radius:50%; background:#ff6b5c; box-shadow:0 0 6px #ff6b5c; opacity:.8; }
+.stand{ position:relative; width:22%; margin:0 auto; height:34px; }
+.stand::before{ content:""; position:absolute; left:50%; top:0; width:20%; height:22px; margin-left:-10%; background:linear-gradient(90deg, #111, #2c2c30, #111); }
+.stand::after{ content:""; position:absolute; left:0; right:0; bottom:0; height:14px; border-radius:50%; background:radial-gradient(ellipse at 50% 30%, #3a3a40, #0b0b0d 70%); box-shadow:0 8px 14px -6px rgba(0,0,0,.8); }
 
-/* ===================== LA CHINCHILLA (whack-a-mole) ===================== */
-.hole{
-  position:absolute;
-  overflow:hidden;           /* lo que esté abajo del borde queda "escondido" */
-  pointer-events:none;
-  transform:translate(-50%, 0);
+.screen{ position:relative; aspect-ratio:16/9; border-radius:2px; overflow:hidden; background:#000; }
+.screen video, .screen img, .screen .card{ position:absolute; inset:0; width:100%; height:100%; }
+.screen video, .screen img{ object-fit:cover; }
+.screen.framed{ background:radial-gradient(90% 80% at 50% 40%, color-mix(in srgb, var(--tint) 40%, #0b0d12), #07080b); }
+.screen video.small{
+  inset:auto; top:50%; left:50%; height:88%; width:auto; aspect-ratio:9/16; object-fit:cover;
+  transform:translate(-50%, -50%); border-radius:6px; box-shadow:0 10px 24px rgba(0,0,0,.5);
 }
-.hole .chin{
-  width:100%; height:auto;
-  transform:translateY(105%);
-  transition:transform .45s cubic-bezier(.3,1.4,.5,1);
-  pointer-events:auto; cursor:pointer;
-  filter:drop-shadow(0 4px 6px rgba(0,0,0,.18));
-  -webkit-user-drag:none; user-select:none;
+.screen img.photo{ animation:ken 16s ease-in-out infinite alternate; }
+@keyframes ken{ from{ transform:scale(1.02);} to{ transform:scale(1.12) translate(-2%, 1%);} }
+.screen::before{ /* the blink to black between channels */
+  content:""; position:absolute; inset:0; z-index:3; background:#000; opacity:0; transition:opacity .12s; pointer-events:none;
 }
-.hole.up .chin{ transform:translateY(0); animation:peek 2.2s ease-in-out infinite .5s; }
-.hole.down .chin{ transition-timing-function:cubic-bezier(.5,0,.8,.4); transition-duration:.3s; }
-.hole.flip .chin{ transform:translateY(0) scaleX(-1); }
-.hole.flip.up .chin{ animation-name:peekFlip; }
-@keyframes peek{ 0%,100%{ transform:translateY(0) rotate(0);} 50%{ transform:translateY(-3%) rotate(-2deg);} }
-@keyframes peekFlip{ 0%,100%{ transform:translateY(0) scaleX(-1) rotate(0);} 50%{ transform:translateY(-3%) scaleX(-1) rotate(2deg);} }
-.hole.nom .chin{ animation:nom .5s ease !important; }
-@keyframes nom{ 0%{transform:scale(1,1);} 30%{transform:scale(1.1,.9);} 60%{transform:scale(.95,1.06);} 100%{transform:scale(1,1);} }
+.screen.blink::before{ opacity:1; transition:none; }
+.screen::after{ /* gloss on the glass */
+  content:""; position:absolute; inset:0; z-index:4; pointer-events:none;
+  background:linear-gradient(118deg, rgba(255,255,255,.11) 0 22%, rgba(255,255,255,0) 42%);
+}
+.card{
+  display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; gap:10px;
+  padding:8%; background:radial-gradient(90% 80% at 50% 40%, color-mix(in srgb, var(--tint) 45%, #0b0d12), #07080b);
+}
+.card.bars{
+  background:linear-gradient(90deg, #c0c0c0 0 14.28%, #c0c000 14.28% 28.57%, #00c0c0 28.57% 42.85%, #00c000 42.85% 57.14%, #c000c0 57.14% 71.42%, #c00000 71.42% 85.71%, #0000c0 85.71%);
+}
+.card .big{ font-family:var(--display); font-size:clamp(24px, 3.4vw, 46px); line-height:1.02; color:#fff; text-shadow:0 2px 14px rgba(0,0,0,.6); text-wrap:balance; }
+.card .small{ font-family:var(--body); font-size:clamp(12px, 1.2vw, 16px); color:rgba(255,255,255,.85); letter-spacing:.08em; text-transform:uppercase; }
+.card.bars .big, .card.bars .small{ background:rgba(0,0,0,.78); padding:2px 12px; }
+.screen .card .pet{ position:static; inset:auto; width:34%; height:auto; object-fit:contain; animation:none; filter:drop-shadow(0 6px 10px rgba(0,0,0,.5)); }
+/* modern channel banner */
+.osd{
+  position:absolute; left:4%; bottom:7%; z-index:5;
+  display:flex; align-items:center; gap:12px;
+  padding:6px 14px 6px 6px; border-radius:8px;
+  background:rgba(10,12,16,.78); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+  font-family:var(--body); font-size:clamp(12px, 1.3vw, 16px); color:#fff;
+  opacity:0; transform:translateY(8px); transition:opacity .25s, transform .25s;
+}
+.osd b{ font-weight:600; min-width:34px; text-align:center; padding:2px 8px; border-radius:5px; background:var(--tint); color:#0d0f13; transition:background .4s; }
+.screen.osd-on .osd{ opacity:1; transform:none; }
 
-.fly{
-  position:fixed; z-index:70; pointer-events:none; font-size:26px; line-height:1;
-  transition:transform .55s cubic-bezier(.45,-0.25,.5,1), opacity .2s;
+/* the hand that comes in with the remote every time the channel changes */
+.hand{
+  position:absolute; z-index:8; pointer-events:none;
+  right:-9%; top:30%; width:48%;
+  transform:translate(45%, 25%); opacity:0;
+  transition:transform .42s cubic-bezier(.2,.9,.3,1), opacity .22s ease;
+  filter:drop-shadow(0 18px 18px rgba(0,0,0,.45));
 }
-.pop{
-  position:fixed; z-index:70; pointer-events:none; font-size:18px; line-height:1;
-  animation:floatUp 1s ease-out forwards;
+.hand.in{ transform:none; opacity:1; }
+.hand img{ width:100%; height:auto; transition:transform .12s; transform-origin:80% 90%;
+  -webkit-mask-image:linear-gradient(125deg, #000 66%, transparent 90%); mask-image:linear-gradient(125deg, #000 66%, transparent 90%); }
+.hand.press img{ transform:translate(-2.5%, -2.5%) rotate(-2deg); }
+.hand .ir{
+  position:absolute; left:10.5%; top:11.8%; width:30%; aspect-ratio:1; transform:translate(-50%, -50%);
+  border-radius:50%; opacity:0;
+  background:radial-gradient(circle, rgba(255,245,255,.95), rgba(236,110,226,.55) 32%, transparent 70%);
 }
-@keyframes floatUp{ 0%{ opacity:1; transform:translateY(0) scale(.6);} 100%{ opacity:0; transform:translateY(-50px) scale(1.1);} }
+.hand.press .ir{ animation:ir .45s ease-out; }
+@keyframes ir{ 0%{ opacity:0; } 20%{ opacity:1; } 100%{ opacity:0; } }
 
-/* ===================== EL MENÚ ===================== */
-.menu{
-  background:var(--paper);
-  padding:72px 24px 90px;
-  border-top:6px solid var(--ink);
-  background-image:
-    repeating-linear-gradient(0deg, transparent 0 31px, rgba(31,31,36,.05) 31px 32px);
+/* the viewer: the chinchilla on the floor with the remote */
+.controls{ display:flex; align-items:flex-end; justify-content:center; gap:4%; margin-top:44px; }
+.viewer{
+  position:relative; width:min(34%, 210px); z-index:6; cursor:pointer; flex:none;
+  filter:drop-shadow(0 6px 8px rgba(0,0,0,.5));
+  transform-origin:50% 100%; transition:transform .2s;
+  border:none; background:none; padding:0;
 }
-.sheet{ max-width:820px; margin:0 auto; }
+.viewer img{ width:100%; }
+.viewer:hover{ transform:rotate(-3deg) translateY(-3px); }
+.viewer.press{ transform:scale(.96, 1.04); }
 
-.menu-title{
-  text-align:center; margin-bottom:54px;
+.viewer .bubble{
+  position:absolute; left:62%; top:-10%; white-space:nowrap;
+  font-family:var(--osd); font-size:17px; color:var(--wall); background:var(--ink); padding:1px 8px; border-radius:6px;
+  opacity:0; transform:translateY(4px); transition:opacity .2s, transform .2s; pointer-events:none;
 }
-.menu-title h2{
-  font-family:'Fraunces', serif; font-weight:700;
-  font-size:clamp(44px, 9vw, 92px); line-height:.95; letter-spacing:-.01em;
-  background:linear-gradient(100deg, var(--yellow) 0 40%, var(--orange) 40% 70%, var(--red) 70%);
-  -webkit-background-clip:text; background-clip:text; color:transparent;
-  -webkit-text-stroke:2px var(--ink); paint-order:stroke fill;
-}
-.menu-title .sub{
-  font-family:'Patrick Hand', cursive; font-size:24px; margin-top:6px;
-}
-.menu-title .note{
-  display:inline-block; margin-top:14px;
-  font-family:'Space Mono', monospace; font-size:12px; letter-spacing:.14em; text-transform:uppercase;
-  border:2px dashed var(--ink); padding:6px 14px; border-radius:100px;
-}
+.viewer:hover .bubble, .viewer:focus-visible .bubble{ opacity:1; transform:none; }
 
-.course{ padding:44px 0; border-bottom:2px dashed var(--line); }
-.course:last-child{ border-bottom:none; }
-.course-head{
-  display:flex; align-items:baseline; gap:14px; margin-bottom:18px; flex-wrap:wrap;
+/* the remote */
+.remote{
+  width:min(52%, 220px); flex:none; transform:rotate(4deg);
+  display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:8px;
+  padding:16px; border-radius:20px;
+  background:linear-gradient(170deg, #2b2f38, #1d2028); box-shadow:0 14px 26px -12px rgba(0,0,0,.7);
 }
-.course-head .num{
-  font-family:'Space Mono', monospace; font-weight:700; font-size:13px; letter-spacing:.1em;
-  background:var(--green); color:#fff; padding:3px 9px; transform:rotate(-2deg); display:inline-block;
+.remote button{
+  font-family:var(--osd); font-size:22px; line-height:1;
+  height:40px; border-radius:10px; border:none; cursor:pointer;
+  background:#3a404c; color:#e7e9ee; box-shadow:0 2px 0 #111318;
+  transition:transform .08s, background .15s;
 }
-.course-head h3{
-  font-family:'Fraunces', serif; font-weight:700; font-size:clamp(28px, 4.5vw, 40px); line-height:1.05;
+.remote button:hover{ background:#4a5160; }
+.remote button:active{ transform:translateY(2px); box-shadow:none; }
+.remote button.on{ background:var(--tint); color:#0d0f13; }
+.remote .lbl{ grid-column:1 / -1; font-family:var(--osd); font-size:15px; color:var(--muted); letter-spacing:.06em; text-align:center; }
+/* how to use the remote; names the channel under the pointer */
+.how{
+  width:fit-content; max-width:100%; margin:18px auto 0; text-align:center;
+  font-size:17px; font-weight:500; color:var(--ink); min-height:1.6em;
+  padding:8px 18px; border-radius:100px;
+  border:1px solid color-mix(in srgb, var(--tint) 55%, transparent);
+  background:color-mix(in srgb, var(--tint) 14%, transparent);
+  transition:border-color .4s, background .4s;
 }
-.course-head h3 em{ font-style:italic; color:var(--red); }
-.course-head .tag{
-  font-family:'Patrick Hand', cursive; font-size:17px; color:var(--muted);
-}
+.how b{ color:var(--tint); font-weight:600; }
 
-.item{ display:flex; gap:.6em; align-items:baseline; margin:10px 0; }
-.item .name{ font-family:'Fraunces', serif; font-weight:700; font-size:21px; white-space:nowrap; }
-.item .dots{ flex:1; border-bottom:2px dotted rgba(31,31,36,.45); transform:translateY(-.35em); min-width:24px; }
-.item .price{ font-family:'Space Mono', monospace; font-weight:700; font-size:14px; white-space:nowrap; }
-.desc{ font-size:20px; color:#3b3b44; max-width:64ch; margin:2px 0 14px; }
-.desc em{ font-style:normal; background:linear-gradient(transparent 55%, rgba(242,217,59,.75) 55%); }
+/* ---------- listing (info for the current channel) ---------- */
+.info{ min-width:0; padding-top:4px; }
+.now{ font-family:var(--osd); font-size:22px; color:var(--tint); letter-spacing:.04em; transition:color .4s; }
+.prog{ animation:fadein .35s ease; }
+@keyframes fadein{ from{ opacity:0; transform:translateY(8px);} to{ opacity:1; transform:none; } }
+.prog h2{ font-family:var(--display); font-weight:400; font-size:clamp(34px, 3.8vw, 52px); line-height:1.02; margin:6px 0 14px; text-wrap:balance; }
+.status{
+  display:inline-block; margin-bottom:12px;
+  font-family:var(--osd); font-size:17px; letter-spacing:.06em; text-transform:uppercase;
+  color:var(--tint); border:1px solid currentColor; padding:0 9px; border-radius:6px;
+}
+.prog p{ max-width:60ch; color:#d9d5cc; }
+.prog p + p{ margin-top:12px; }
+.tags{ display:flex; flex-wrap:wrap; gap:8px; margin-top:18px; }
+.tags span{ font-size:13px; color:var(--muted); border:1px solid var(--line); padding:3px 11px; border-radius:100px; }
+.list{ list-style:none; display:flex; flex-direction:column; gap:16px; }
+.list li{ display:grid; grid-template-columns:84px minmax(0,1fr); gap:2px 16px; }
+.list .when{ font-family:var(--osd); font-size:18px; color:var(--tint); }
+.list .what{ min-width:0; }
+.list b{ display:block; font-weight:600; }
+.list i{ color:var(--muted); }
+.list .d{ display:block; color:#d0ccc3; }
+.wip{ margin-top:14px; padding:10px 14px; border-left:3px solid var(--tint); background:color-mix(in srgb, var(--tint) 10%, transparent); border-radius:0 6px 6px 0; }
+.wip b{ color:var(--tint); }
+.paper-link{ color:var(--tint); text-decoration:none; border-bottom:1px solid currentColor; }
+.list b a{ text-decoration:none; border-bottom:1px solid color-mix(in srgb, var(--tint) 60%, transparent); }
+.list b a:hover{ color:var(--tint); }
+.list .wip-inline{ color:var(--tint); font-size:14.5px; margin-top:4px; }
+.contact{ display:flex; flex-direction:column; gap:4px; }
+.contact a, .contact .addr{ font-family:var(--display); font-size:clamp(22px, 2.4vw, 30px); text-decoration:none; overflow-wrap:anywhere; width:fit-content; max-width:100%; }
+.contact a:hover{ color:var(--tint); }
+.hint{ margin-top:28px; font-size:13.5px; color:var(--muted); }
+.hint kbd{ font-family:var(--osd); font-size:16px; border:1px solid var(--line); border-radius:4px; padding:0 5px; }
 
-.ingredients{ display:flex; flex-wrap:wrap; gap:10px; margin-top:14px; }
-.ingredients span{
-  font-size:18px; padding:5px 14px; border:2px solid var(--ink); border-radius:100px;
-  background:var(--card); box-shadow:2px 2px 0 var(--ink);
-}
+/* role, findings, notes */
+.role{ margin-top:14px; font-size:15px; color:#cfcbc2; }
+.role b{ color:var(--tint); font-weight:600; }
+.findings{ margin:12px 0 0 0; padding-left:1.1em; display:flex; flex-direction:column; gap:6px; max-width:60ch; color:#d9d5cc; }
+.findings li::marker{ color:var(--tint); }
+.small-note{ font-size:14px; color:var(--muted) !important; }
+.fullname{ color:var(--ink); font-weight:600; }
+.guide-head a{ font-family:var(--osd); font-size:18px; text-decoration:none; border-bottom:1px solid currentColor; }
 
-.takeaway{
-  display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap;
-  background:var(--card); border:2px solid var(--ink); border-radius:16px;
-  padding:22px 26px; box-shadow:5px 5px 0 var(--ink); margin-top:8px;
+/* everything on one page */
+.all{ margin-top:64px; scroll-margin-top:16px; }
+.all-head h2{ font-family:var(--display); font-weight:400; font-size:clamp(32px, 3.6vw, 46px); line-height:1.05; }
+.all-head p{ color:var(--muted); margin-top:6px; }
+.all-item{
+  display:grid; grid-template-columns:120px minmax(0,1fr); gap:8px 32px;
+  padding:34px 0; border-top:1px solid var(--line);
 }
-.takeaway .meta{ font-family:'Space Mono', monospace; font-size:12px; color:var(--muted); }
-.takeaway .meta b{ color:var(--ink); }
-.btn{
-  display:inline-flex; align-items:center; gap:10px;
-  background:var(--red); color:#fff; font-family:'Fraunces', serif; font-weight:700; font-size:18px;
-  text-decoration:none; padding:12px 24px; border-radius:100px; border:2px solid var(--ink);
-  box-shadow:3px 3px 0 var(--ink); transition:transform .15s, box-shadow .15s;
-}
-.btn:hover{ transform:translate(-2px,-2px); box-shadow:5px 5px 0 var(--ink); }
-.btn:active{ transform:translate(1px,1px); box-shadow:2px 2px 0 var(--ink); }
-
-/* platillos especiales = proyectos con demo */
-.dishes{ display:grid; grid-template-columns:repeat(auto-fit, minmax(230px, 1fr)); gap:18px; }
-.dish{
-  background:var(--card); border:2px solid var(--ink); border-radius:14px; padding:18px 18px 20px;
-  box-shadow:4px 4px 0 var(--ink); display:flex; flex-direction:column; gap:10px; min-width:0;
-}
-.dish-top{ display:flex; justify-content:space-between; align-items:flex-start; gap:10px; }
-.dish h4{ font-family:'Fraunces', serif; font-weight:700; font-size:21px; line-height:1.1; }
-.dish .status{
-  font-family:'Space Mono', monospace; font-size:10px; letter-spacing:.1em; text-transform:uppercase;
-  background:var(--yellow); padding:3px 7px; white-space:nowrap; transform:rotate(2deg);
-}
-.dish.soon .status{ background:var(--sky); }
-.dish p{ font-size:18px; color:#3b3b44; flex:1; }
-.dish-tags{ display:flex; flex-wrap:wrap; gap:6px; }
-.dish-tags span{ font-size:15px; padding:2px 10px; border:1.5px solid var(--ink); border-radius:100px; }
-.btn-sm{ font-size:15px; padding:9px 16px; align-self:flex-start; }
-.dish-actions{ display:flex; flex-wrap:wrap; gap:8px; }
-.btn-ghost{ background:var(--card); color:var(--ink); }
-
-/* timeline como "comandas" */
-.orders{ display:flex; flex-direction:column; gap:14px; }
-.order{
-  background:var(--card); border:2px solid var(--ink); padding:16px 20px 16px 18px;
-  position:relative; box-shadow:3px 3px 0 var(--ink);
-  transform:rotate(var(--tilt, 0deg));
-}
-.order:nth-child(odd){ --tilt:-.4deg; }
-.order:nth-child(even){ --tilt:.4deg; }
-.order::before{
-  content:''; position:absolute; left:-2px; top:-2px; bottom:-2px; width:8px;
-  background:repeating-linear-gradient(0deg, var(--red) 0 10px, var(--yellow) 10px 20px, var(--green) 20px 30px);
-}
-.order .when{ font-family:'Space Mono', monospace; font-size:12px; font-weight:700; letter-spacing:.08em; color:var(--cola); }
-.order h4{ font-family:'Fraunces', serif; font-weight:700; font-size:21px; margin:2px 0 4px; }
-.order p{ font-size:18px; color:#3b3b44; max-width:62ch; }
-
-.contact-links{ display:flex; flex-direction:column; gap:8px; }
-.contact-links a{
-  font-family:'Fraunces', serif; font-weight:700; font-size:clamp(18px, 3vw, 24px);
-  text-decoration:none; width:fit-content; word-break:break-all;
-  border-bottom:3px solid transparent; transition:border-color .2s, color .2s;
-}
-.contact-links a:hover{ color:var(--red); border-color:var(--red); }
-.foot{
-  margin-top:48px; text-align:center;
-  font-family:'Space Mono', monospace; font-size:11px; color:var(--muted);
+.all-item:first-child{ margin-top:22px; }
+.all-ch{ font-family:var(--osd); font-size:22px; color:var(--k, var(--muted)); letter-spacing:.04em; }
+.all-body{ min-width:0; max-width:760px; }
+.all-body h2, .all-body h3{ font-family:var(--display); font-weight:400; font-size:clamp(26px, 2.6vw, 34px); line-height:1.08; margin:4px 0 10px; }
+.all-body .status{ color:var(--k); }
+.all-body .role b, .all-body .wip b, .all-body .paper-link, .all-body .list .when, .all-body .wip-inline{ color:var(--k); }
+.all-body .wip{ border-left-color:var(--k); background:color-mix(in srgb, var(--k) 10%, transparent); }
+.all-body .findings li::marker{ color:var(--k); }
+.all-body .hint{ display:none; }
+.all-body p + p{ margin-top:10px; }
+@media (max-width: 900px){
+  .all-item{ grid-template-columns:1fr; padding:26px 0; }
 }
 
-/* reveal */
-.reveal{ opacity:0; transform:translateY(22px); transition:opacity .6s ease, transform .6s ease; }
-.reveal.in{ opacity:1; transform:none; }
+/* ---------- printed TV guide ---------- */
+.guide{
+  margin-top:72px; background:var(--paper); color:var(--paper-ink);
+  padding:26px 28px 30px; border-radius:3px; box-shadow:0 20px 40px -18px rgba(0,0,0,.6);
+  transform:rotate(-.4deg);
+}
+.guide-head{ display:flex; justify-content:space-between; align-items:baseline; gap:12px; border-bottom:3px double var(--paper-ink); padding-bottom:8px; margin-bottom:6px; }
+.guide-head h3{ font-family:var(--display); font-weight:400; font-size:28px; }
+.guide-head span{ font-family:var(--osd); font-size:18px; }
+.guide ol{ list-style:none; columns:2; column-gap:40px; }
+.guide li{ break-inside:avoid; border-bottom:1px solid rgba(0,0,0,.15); }
+.guide a{
+  display:grid; grid-template-columns:52px minmax(0,1fr); gap:10px; align-items:baseline;
+  padding:8px 2px; text-decoration:none;
+}
+.guide .ch{ font-family:var(--osd); font-size:20px; }
+.guide .t{ font-weight:600; }
+.guide .t em{ font-weight:400; font-style:normal; color:#55575c; display:block; font-size:14px; }
+.guide a:hover .t, .guide a.on .t{ text-decoration:underline; text-underline-offset:3px; }
+.guide a.on .ch::before{ content:"▶ "; }
+.foot{ margin-top:28px; font-family:var(--osd); font-size:16px; color:var(--muted); }
 
-/* ===================== RESPONSIVE ===================== */
-@media (max-width: 700px){
-  /* el puesto a lo ancho, sin flotar en un mar azul */
-  .hero{ min-height:auto; padding:64px 0 64px; align-items:flex-start; }
-  .stand{ width:100%; }
-  .hero{ padding-top:70px; }
-  .stand{ width:100%; }
-  .sign{ top:14px; left:0; width:100%; text-align:center; }
-  .sign .who{ font-size:10px; letter-spacing:.14em; }
-  .board{ left:40%; top:69%; width:52%; font-size:clamp(9px, 2.6cqw, 13px); line-height:1.15; }
-  .board li .price{ display:none; }
-  .tacos-fed{ top:auto; bottom:14px; left:14px; right:auto; font-size:11px; padding:6px 10px; }
-  .scroll-hint{ bottom:10px; right:16px; left:auto; transform:none; flex-direction:row; align-items:center; gap:6px; animation:none; }
-  .item .name{ font-size:19px; white-space:normal; }
-  .menu{ padding:56px 18px 70px; }
+/* ---------- responsive ---------- */
+@media (max-width: 900px){
+  .room{ padding-block:20px 48px; }
+  .top{ margin-bottom:20px; }
+  .stage{ grid-template-columns:1fr; gap:24px; }
+  .set{ order:0; }
+  .room::before{ background:radial-gradient(60% 55% at 50% 22%, color-mix(in srgb, var(--tint) 26%, transparent), transparent 70%); }
+  .hand{ width:56%; right:-8%; top:30%; }
+  .stand{ height:24px; }
+  .controls{ margin-top:30px; }
+  .remote{ padding:12px; gap:6px; }
+  .remote button{ height:36px; font-size:20px; }
+  .guide{ padding:20px 18px; transform:none; margin-top:48px; }
+  .guide-head h3{ font-size:23px; }
+  .guide-head span{ display:none; }
+  .guide ol{ columns:1; }
+  .list li{ grid-template-columns:1fr; }
 }
 @media (prefers-reduced-motion: reduce){
   html{ scroll-behavior:auto; }
-  .reveal{ transition:none; opacity:1; transform:none; }
-  .scroll-hint, .hole.up .chin{ animation:none; }
-  .hole .chin{ transition:none; }
+  .screen img.photo, .prog{ animation:none; }
+  .viewer, .room::before{ transition:none; }
+  .hand{ display:none; }
 }
 </style>
 </head>
 <body>
+<div class="room">
+<div class="inner">
 
-<!-- ================= EL PUESTO ================= -->
-<header class="hero" id="home">
-  <div class="sign">
-    <span class="who">Monse Arriaga · Computer Science · UNAM</span>
-  </div>
-  <div class="stand" id="stand">
-    <img src="tacos.png" alt="Hand-drawn taco stand: Tacos de Guisado, with a trompo, a Coca-Cola fridge, a TV and a green stool" draggable="false">
-
-    <!-- lo que va escrito en la pizarra debajo de "MENU:" -->
-    <nav class="board" aria-label="Menu">
-      <ul>
-        <li><a href="#home-menu">Home</a><span class="dots"></span><span class="price">$ 1</span></li>
-        <li><a href="#about">About</a><span class="dots"></span><span class="price">$ 2</span></li>
-        <li><a href="#projects">Projects</a><span class="dots"></span><span class="price">$ 3</span></li>
-        <li><a href="#cv">CV</a><span class="dots"></span><span class="price">$ 4</span></li>
-        <li><a href="#timeline">Timeline</a><span class="dots"></span><span class="price">$ 5</span></li>
-        <li><a href="#contact">Contact</a><span class="dots"></span><span class="price">$ 6</span></li>
-      </ul>
+  <header class="top">
+    <h1>Monse Arriaga</h1>
+    <p class="line"><b class="fullname">Estela Monserrat Arriaga Santana</b> · AI researcher studying how video world models handle time · Computer Science, UNAM · English Literature student</p>
+    <nav class="links">
+      <a class="primary" href="#all" id="readAll">Read everything ↓</a>
+      <a href="cv.pdf">CV (PDF)</a>
+      <a href="https://github.com/monse-arriaga" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://orcid.org/0009-0006-5458-2546" target="_blank" rel="noopener">ORCID</a>
     </nav>
+  </header>
 
-    <!-- la tele: reproduce los videos de la lista PLAYLIST (ver script); clic = siguiente canal -->
-    <div class="tv" id="tv" title="Click to change the channel">
-      <video id="tvVideo" muted autoplay playsinline preload="metadata"></video>
-      <img id="tvImg" alt="" draggable="false">
-      <div class="static">NO SIGNAL<br>drop your videos<br>in /videos</div>
-      <div class="label" id="tvLabel"></div>
+  <div class="stage">
+    <!-- ================= THE SET ================= -->
+    <div class="set">
+      <div class="tvwrap">
+        <div class="tv">
+          <div class="screen osd-on" id="screen">
+            <video id="v" muted loop playsinline preload="metadata"></video>
+            <img id="img" alt="" hidden>
+            <div class="card" id="card" hidden></div>
+            <div class="osd" id="osd"><b>0</b><span>Monse Arriaga</span></div>
+          </div>
+          <span class="logo-led" aria-hidden="true"></span>
+        </div>
+        <div class="stand" aria-hidden="true"></div>
+
+        <!-- the hand with the remote: Monse's own drawing; slides in on every channel change -->
+        <div class="hand" id="hand" aria-hidden="true">
+          <img src="hand.png" alt="">
+          <span class="ir"></span>
+        </div>
+      </div>
+
+      <div class="controls">
+      <button class="viewer" id="viewer" aria-label="Next channel">
+        <img src="chinchilla.png" alt="">
+        <span class="bubble">next!</span>
+      </button>
+
+      <div class="remote" role="group" aria-label="Remote control">
+        <button data-ch="1" aria-label="Channel 1, Research">1</button>
+        <button data-ch="2" aria-label="Channel 2, Bluebird detection in the wild">2</button>
+        <button data-ch="3" aria-label="Channel 3, Worlds in Slow Motion">3</button>
+        <button data-ch="4" aria-label="Channel 4, Keeping time">4</button>
+        <button data-ch="5" aria-label="Channel 5, Memory of political discourse">5</button>
+        <button data-ch="6" aria-label="Channel 6, Adversarial poetry contest">6</button>
+        <button data-ch="7" aria-label="Channel 7, Publications">7</button>
+        <button data-ch="8" aria-label="Channel 8, Experience">8</button>
+        <button data-ch="9" aria-label="Channel 9, About">9</button>
+        <button id="chDown" aria-label="Previous channel">▼</button>
+        <button data-ch="0" aria-label="Channel 0, start">0</button>
+        <button id="chUp" aria-label="Next channel">▲</button>
+        <span class="lbl">▼ CH ▲</span>
+      </div>
+      </div>
+      <p class="how" id="how">Press a number on the remote to change the channel</p>
     </div>
 
-    <!-- la chinchilla; el JS la mueve entre "agujeros" -->
-    <div class="hole" id="hole" aria-hidden="true">
-      <img class="chin" id="chin" src="chinchilla.png" alt="" draggable="false" title="Feed me a taco!">
-    </div>
+    <!-- ================= NOW SHOWING ================= -->
+    <section class="info" aria-live="polite">
+      <div class="now" id="now">NOW ON CH 00</div>
+
+      <!-- each <article> is a channel. data-media: video:path | img:path | card:style|big|small -->
+      <article class="prog" data-ch="0" data-tint="#9fb4d8" data-name="Monse Arriaga" data-media="card:bars|Monse Arriaga|AI · time · world models">
+        <h2>Hi, I’m Monse.</h2>
+        <p>I study how video world models handle time, and I build benchmarks that measure it. Each channel on this TV is one part of my work. Use the remote, the arrow keys, or ask the chinchilla to change it.</p>
+        <p>In a hurry? <a class="paper-link" href="#all">Read everything on one page ↓</a></p>
+        <p class="hint">Keyboard: <kbd>←</kbd> <kbd>→</kbd> change channel, <kbd>0</kbd>–<kbd>9</kbd> jump to one.</p>
+      </article>
+
+      <article class="prog" data-ch="1" data-tint="#7fd0b8" data-name="Research" data-media="video:videos/keeping-time.mp4" hidden>
+        <h2>Research</h2>
+        <p>I’m interested in building projects that don’t only answer a scientific question but also, in some way, tell a story. World model benchmarks generate thousands of videos that are expensive to make, often evaluated by hand, and that nobody really uses afterwards. I would like the datasets and the information I generate to create a story and that outlives the question that produced it.</p>
+        <p>Right now the question I care about is time: change over time and its periodicity. How time works inside world models, which structures help them count and keep a period, and how time-related hallucinations live inside the model’s virtual world.</p>
+        <div class="tags"><span>World Models</span><span>Computer Vision</span><span>Multimodal AI</span><span>Representation Learning</span><span>Interpretability</span></div>
+      </article>
+
+      <article class="prog" data-ch="2" data-tint="#9ccf7a" data-name="Bluebird detection" data-media="img:videos/bluebird.jpg" hidden>
+        <span class="status">CVPR LatinX · ICPR 2026</span>
+        <h2>Western Bluebird detection in the wild</h2>
+        <p>Can a detector find a small bird in a 4K frame? Ecologists filming nest boxes need to know when birds arrive, fight and leave, and annotating that video by hand is slow. I built a benchmark from fixed-camera footage of Western Bluebirds (<em>Sialia mexicana</em>) recorded during a nest-competition experiment in La Malinche National Park, Tlaxcala: 6,016 annotated frames with 7,637 birds, most of them under 0.3% of the image.</p>
+        <p>I compared supervised detectors (YOLOv8, YOLO26, Faster R-CNN, RT-DETR), open-vocabulary models used zero-shot and fine-tuned (OWL-ViT, YOLO-World, Grounding DINO) and segmentation models (Mask R-CNN, YOLOv8-Seg, Grounded-SAM, SAM 3).</p>
+        <ul class="findings">
+          <li>Supervised detectors are the most reliable. Faster R-CNN has the best mAP@0.5:0.95 (0.47).</li>
+          <li>Open-vocabulary models almost fail zero-shot, but fine-tuned YOLO-World reaches the best mAP@0.5 (0.94).</li>
+          <li>Failures depend on brightness, contrast, crowding and blur together, not only on object size.</li>
+        </ul>
+        <p class="role"><b>My role:</b> I designed the benchmark, built the training and evaluation pipeline, ran the experiments and annotated data.</p>
+        <p><a class="paper-link" href="https://arxiv.org/abs/2610.07802" target="_blank" rel="noopener">Paper on arXiv →</a></p>
+        <div class="tags"><span>Computer Vision</span><span>Small-object detection</span><span>Ecology</span><span>Benchmarks</span></div>
+      </article>
+
+      <article class="prog" data-ch="3" data-tint="#e8b56a" data-name="Worlds in Slow Motion" data-media="video:videos/slow-motion.mp4" hidden>
+        <span class="status">work in progress</span>
+        <h2>Worlds in Slow Motion</h2>
+        <p>Do video world models respond to a physical event, or do they just keep the scene moving? We filmed real, calibrated experiments (falls, collisions, ramps, pendulums), showed the models the moment right before the event, and measured what they generated against what actually happened. First results with four models. The next round needs more prompts, more seeds and more human annotation, which means more compute and more people.</p>
+        <p class="wip"><b>Work in progress.</b> The preprint on arXiv is an early version with fewer experiments, and its results are not final. I’m expanding the dataset and revising the analysis, so numbers and conclusions may change.</p>
+        <p class="role"><b>My role:</b> I designed the benchmark, built the measurement pipeline, ran the experiments and annotated generations.</p>
+        <p><a class="paper-link" href="https://arxiv.org/abs/2609.36531" target="_blank" rel="noopener">Early preprint on arXiv →</a></p>
+        <div class="tags"><span>World Models</span><span>Physics</span><span>Benchmarks</span></div>
+      </article>
+
+      <article class="prog" data-ch="4" data-tint="#c79bea" data-name="Keeping time" data-media="video:videos/keeping-time.mp4" hidden>
+        <span class="status">in preparation</span>
+        <h2>Keeping time</h2>
+        <p>Can a video model keep time when you ask it to? A benchmark that measures it frame by frame across several current image-to-video models, with a human check on the automatic measurement. Paper in preparation, not on arXiv yet.</p>
+        <p class="role"><b>My role:</b> I designed the benchmark, built the pipeline, ran the experiments and annotated videos.</p>
+        <div class="tags"><span>World Models</span><span>Video Generation</span><span>Time</span></div>
+      </article>
+
+      <article class="prog" data-ch="5" data-tint="#7fb0e0" data-name="Memory of political discourse" data-media="card:plain|Memory of political discourse|234,134 tweets · 2018–2024" hidden>
+        <span class="status">undergraduate thesis · NUS research</span>
+        <h2>The memory of political discourse</h2>
+        <p>How does political discourse on X/Twitter organize itself, and how does it change from one year to the next? I built a corpus of 234,134 tweets from 19 Mexican political and media accounts (2018–2024), embedded them with BGE-M3, and found 214 semantic clusters with UMAP and HDBSCAN. Then I used modern Hopfield networks as a memory for each political year and asked which memory a new post “belongs” to.</p>
+        <ul class="findings">
+          <li>One average per year is not enough. Memories built from topic × month keep much more of the structure of each year.</li>
+          <li>A hybrid memory (Hopfield memories for clustered posts and a linear classifier for scattered ones) gave the best balance of compression, interpretability and temporal recall.</li>
+          <li>Posts that clustering calls “noise” still carry temporal signal: they are scattered discourse, not empty content.</li>
+          <li>The temporal signal comes from what is said, not only from who is saying it.</li>
+        </ul>
+        <p class="small-note">Not published as a paper because of the nature of the data (tweets). Only aggregated results are shown.</p>
+        <p class="role"><b>My role:</b> Sole author: corpus, pipeline, experiments and analysis.</p>
+        <div class="tags"><span>NLP</span><span>Embeddings</span><span>Clustering</span><span>Hopfield networks</span><span>Time</span></div>
+      </article>
+
+      <article class="prog" data-ch="6" data-tint="#f08c9c" data-name="Adversarial poetry" data-media="card:plain|Adversarial poetry contest|Call for entries soon" hidden>
+        <span class="status">soon</span>
+        <h2>Adversarial poetry contest</h2>
+        <p>Can a poem break a language model? A contest I’m organizing where every entry is a poem written to make a model do what it shouldn’t. Rules and dates coming soon.</p>
+        <div class="tags"><span>Poetry</span><span>Jailbreaks</span><span>English Literature</span></div>
+      </article>
+
+      <article class="prog" data-ch="7" data-tint="#e9d36f" data-name="Publications" data-media="card:plain|Publications|CLEF · ICPR · CVPR LatinX · arXiv" hidden>
+        <h2>Publications</h2>
+        <p class="small-note">Published as Estela Monserrat Arriaga Santana.</p>
+        <ul class="list">
+          <li><span class="when">2026</span><span class="what"><b><a href="https://arxiv.org/abs/2610.07802" target="_blank" rel="noopener">Towards benchmarking Western Bluebird detection in the wild</a></b><span class="d">E. M. Arriaga Santana, J. Rosas Scull, I. P. Alarcón, B. Montoya, A. Sosa Mejía, H. J. Escalante</span><i>CVPR LatinX Workshop 2026 · extended version accepted at ICPR 2026</i></span></li>
+          <li><span class="when">2026</span><span class="what"><b><a href="https://ceur-ws.org/Vol-4283/paper164.pdf" target="_blank" rel="noopener">Detecting Sexism in Memes with Vision-Language Models for EXIST 2026</a></b><span class="d">L. A. H. Miranda, E. M. Arriaga Santana, A. Flores Reyes, L. E. Quintero Cuevas, F. F. López-Ponce, G. Sierra</span><i>CLEF 2026 Working Notes, CEUR-WS vol. 4283</i></span></li>
+          <li><span class="when">Preprint</span><span class="what"><b><a href="https://arxiv.org/abs/2609.36531" target="_blank" rel="noopener">Foresight at the Event Boundary: Evaluating Physical Prediction in Video World Models</a></b><span class="d">E. M. Arriaga Santana, J. Rosas Scull, E. S. Núñez Rico, H. J. Escalante</span><i>arXiv, 2026</i><span class="d wip-inline">Early version, work in progress. An expanded version (<em>Worlds in Slow Motion</em>) is being prepared; results may change.</span></span></li>
+        </ul>
+      </article>
+
+      <article class="prog" data-ch="8" data-tint="#86a8e8" data-name="Experience" data-media="card:plain|Experience|Industry · Research" hidden>
+        <h2>Experience</h2>
+        <ul class="list">
+          <li><span class="when">2026 –</span><span class="what"><b>Analyst, Software Engineering · BlackRock</b><span class="d">Full-stack development for Aladdin, BlackRock’s investment platform.</span></span></li>
+          <li><span class="when">2025</span><span class="what"><b>Research Intern · National University of Singapore</b><span class="d">NLP research on political discourse with transformer embeddings, clustering and representation learning (see channel 5).</span></span></li>
+          <li><span class="when">2025</span><span class="what"><b>B.Sc. Computer Science · UNAM</b><span class="d">Completed. National Autonomous University of Mexico.</span></span></li>
+          <li><span class="when">2024 –</span><span class="what"><b>B.A. English Literature · UNAM</b><span class="d">In progress. Second degree, Faculty of Philosophy and Letters.</span></span></li>
+          <li><span class="when">2024–25</span><span class="what"><b>Software Cybersecurity Engineer · Honeywell</b><span class="d">Automation and cybersecurity solutions for industrial and aerospace applications.</span></span></li>
+          <li><span class="when">2024</span><span class="what"><b>AI Intern · AWL Inc., Japan (METI program)</b><span class="d">Performance analysis and monitoring tools for edge AI systems.</span></span></li>
+        </ul>
+      </article>
+
+      <article class="prog" data-ch="9" data-tint="#f2a7c3" data-name="About" data-media="video-small:videos/chinchilla.mp4" hidden>
+        <h2>About</h2>
+        <p>I also study English Literature, which keeps me thinking about language and meaning from a completely different direction.</p>
+        <p>Outside of research I like playing video games, mostly <em>LEGO Batman</em>, <em>Disco Elysium</em> and <em>Baldur’s Gate</em>. When there’s nothing to do I read, and I like taking care of my chinchilla.</p>
+      </article>
+    </section>
   </div>
 
-  <div class="tacos-fed" id="fed">🌮 tacos fed · <b id="fedCount">0</b></div>
+  <!-- ================= TV GUIDE ================= -->
+  <nav class="guide" aria-label="All channels">
+    <div class="guide-head"><h3>Tonight on Monse TV</h3><a href="#all">Read everything ↓</a></div>
+    <ol id="guide">
+      <li><a href="#ch1" data-ch="1"><span class="ch">01</span><span class="t">Research<em>How world models handle time</em></span></a></li>
+      <li><a href="#ch2" data-ch="2"><span class="ch">02</span><span class="t">Western Bluebird detection<em>CVPR LatinX · ICPR 2026</em></span></a></li>
+      <li><a href="#ch3" data-ch="3"><span class="ch">03</span><span class="t">Worlds in Slow Motion<em>Work in progress · early preprint</em></span></a></li>
+      <li><a href="#ch4" data-ch="4"><span class="ch">04</span><span class="t">Keeping time<em>In preparation · timing</em></span></a></li>
+      <li><a href="#ch5" data-ch="5"><span class="ch">05</span><span class="t">Memory of political discourse<em>Thesis · NUS research</em></span></a></li>
+      <li><a href="#ch6" data-ch="6"><span class="ch">06</span><span class="t">Adversarial poetry contest<em>Soon · poems vs. language models</em></span></a></li>
+      <li><a href="#ch7" data-ch="7"><span class="ch">07</span><span class="t">Publications<em>CLEF 2026, ICPR 2026, CVPR LatinX, arXiv</em></span></a></li>
+      <li><a href="#ch8" data-ch="8"><span class="ch">08</span><span class="t">Experience<em>BlackRock, NUS, Honeywell, AWL, UNAM</em></span></a></li>
+      <li><a href="#ch9" data-ch="9"><span class="ch">09</span><span class="t">About<em>Literature, games, a chinchilla</em></span></a></li>
+    </ol>
+  </nav>
 
-  <a class="scroll-hint" href="#menu">see the menu <span>↓</span></a>
-</header>
-
-<!-- ================= EL MENÚ ================= -->
-<main class="menu" id="menu">
-  <div class="sheet">
-
-    <div class="menu-title reveal">
-      <h2>MENÚ</h2>
-      <div class="sub">Tacos de Guisado · served by Monse Arriaga</div>
-      <div class="note">questions welcome · no cards accepted</div>
+  <!-- ================= EVERYTHING ON ONE PAGE ================= -->
+  <section class="all" id="all" aria-label="Everything on one page">
+    <div class="all-head">
+      <h2>Everything, in order</h2>
+      <p>All nine channels on one page, for reading straight through.</p>
     </div>
-
-    <!-- ---- 01 De la casa (Home) ---- -->
-    <section class="course reveal" id="home-menu">
-      <div class="course-head">
-        <span class="num">01</span>
-        <h3>Home <em>· house special</em></h3>
-        <span class="tag">Hi 👋</span>
-      </div>
-
-      <div class="item"><span class="name">Intro taco</span><span class="dots"></span><span class="price">$ 1 min</span></div>
-      <p class="desc">I'm Monse Arriaga, and I study how intelligent systems <em>learn, reason, and see the world</em>. I'm a Computer Science student at the National Autonomous University of Mexico (UNAM), fascinated by how machines learn to perceive and make sense of the world. My work moves between academia and industry: research collaborations on one side, practical technology projects on the other, and I'm happiest working somewhere in that overlap.</p>
-
-      <div class="item"><span class="name">Taco of things I like</span><span class="dots"></span><span class="price">$ 2 min</span></div>
-      <p class="desc">I'm especially drawn to computer vision, multimodal AI, world models, and representation learning, along with the trickier question of whether we can really trust and interpret what these systems do. I also study English Literature, which keeps me thinking about language and meaning from a completely different direction.</p>
-
-      <div class="item"><span class="name">What I'm cooking</span><span class="dots"></span><span class="price">$ time</span></div>
-      <p class="desc">I’m interested in building projects that don’t only answer a scientific question but also, in some way, tell a story. World model benchmarks generate thousands of videos that are expensive to make, often evaluated by hand, and that nobody really uses afterwards. I would like the datasets and the information I generate to create a story and that outlives the question that produced it.</p>
-      <p class="desc">Right now the question I care about is time: change over time and its periodicity. How time works inside world models, which structures help them count and keep a period, and how time-related hallucinations live inside the model’s virtual world.</p>
-
-      <div class="item"><span class="name">After-work taco</span><span class="dots"></span><span class="price">$ 1 book</span></div>
-      <p class="desc">Outside of research I like playing video games, mostly <em>LEGO Batman</em>, <em>Disco Elysium</em> and <em>Baldur's Gate</em>. When there's nothing to do I read, and I like taking care of my chinchilla.</p>
-    </section>
-
-    <!-- ---- 02 Guisados (About) ---- -->
-    <section class="course reveal" id="about">
-      <div class="course-head">
-        <span class="num">02</span>
-        <h3>About <em>· the guisados</em></h3>
-      </div>
-
-      <div class="item"><span class="name">Guisado of my path so far</span><span class="dots"></span><span class="price">$ research + industry</span></div>
-      <p class="desc">Throughout my academic journey, I have combined research, industry experience, and international collaborations. I have participated in research projects in artificial intelligence and computational modeling, completed international programs in Japan and Singapore, contributed to scientific publications, and worked in technology and data roles in industry.</p>
-      <p class="desc">These experiences have strengthened my interest in advancing AI research and pursuing graduate studies at leading research institutions.</p>
-
-      <div class="item"><span class="name">Ingredients</span><span class="dots"></span><span class="price">$ to taste</span></div>
-      <div class="ingredients">
-        <span>Computer Vision</span>
-        <span>Multimodal AI</span>
-        <span>World Models</span>
-        <span>Representation Learning</span>
-        <span>Interpretability</span>
-      </div>
-    </section>
-
-    <!-- ---- 03 Special menu (Projects) ----
-         Cada .dish es un proyecto. Para agregar uno: copia un <article class="dish">,
-         cambia título, descripción, chips y el href del botón "Try the demo".
-         Quita la clase "soon" cuando el demo ya esté en línea. -->
-    <section class="course reveal" id="projects">
-      <div class="course-head">
-        <span class="num">03</span>
-        <h3>Special menu <em>· what's cooking</em></h3>
-        <span class="tag">live demos of current projects</span>
-      </div>
-      <div class="dishes">
-        <article class="dish">
-          <div class="dish-top">
-            <h4>Bluebird in the Wild</h4>
-            <span class="status">now serving</span>
-          </div>
-          <p>Benchmarking AI systems in real-world conditions. Extended version accepted at ICPR 2026; earlier version at the CVPR LatinX Workshop.</p>
-          <div class="dish-tags"><span>Computer Vision</span><span>Benchmarks</span></div>
-          <div class="dish-actions"><a class="btn btn-sm" href="#" data-channel="0">📺 Watch on the TV</a></div>
-        </article>
-        <article class="dish">
-          <div class="dish-top">
-            <h4>Worlds in Slow Motion</h4>
-            <span class="status">in progress</span>
-          </div>
-          <p>Do video world models respond to a physical event, or do they just keep the scene moving? We filmed real, calibrated experiments (falls, collisions, ramps, pendulums), showed the models the moment right before the event, and measured what they generated against what actually happened. First results with four models. The next round needs more prompts, more seeds and more human annotation, which means more compute and more people.</p>
-          <div class="dish-tags"><span>World Models</span><span>Physics</span><span>Benchmarks</span></div>
-          <!-- cuando puedas enlazar el preprint, agrega: <a class="btn btn-sm btn-ghost" href="URL_ARXIV" target="_blank" rel="noopener">Preprint →</a> -->
-          <div class="dish-actions"><a class="btn btn-sm" href="#" data-channel="1">📺 Watch on the TV</a></div>
-        </article>
-        <article class="dish">
-          <div class="dish-top">
-            <h4>Keeping time</h4>
-            <span class="status">in preparation</span>
-          </div>
-          <p>Can a video model keep time when you ask it to? A benchmark that measures it frame by frame across several current image-to-video models, with a human check on the automatic measurement. Paper in preparation, not on arXiv yet.</p>
-          <div class="dish-tags"><span>World Models</span><span>Video Generation</span><span>Time</span></div>
-          <div class="dish-actions"><a class="btn btn-sm" href="#" data-channel="2">📺 Watch on the TV</a></div>
-        </article>
-        <article class="dish">
-          <div class="dish-top">
-            <h4>Adversarial poetry contest</h4>
-            <span class="status">call for entries soon</span>
-          </div>
-          <p>Can a poem break a language model? A contest I'm organizing where every entry is a poem written to make a model do what it shouldn't. Rules and dates coming soon.</p>
-          <div class="dish-tags"><span>Poetry</span><span>Jailbreaks</span><span>English Literature</span></div>
-        </article>
-      </div>
-    </section>
-
-    <!-- ---- 04 CV ---- -->
-    <section class="course reveal" id="cv">
-      <div class="course-head">
-        <span class="num">04</span>
-        <h3>CV <em>· to go</em></h3>
-      </div>
-      <div class="item"><span class="name">Full CV order</span><span class="dots"></span><span class="price">$ 1 PDF</span></div>
-      <p class="desc">The full version, with publications, education, experience, and references.</p>
-      <div class="takeaway">
-        <div class="meta">PDF · <b>Last updated June 2026</b></div>
-        <a class="btn" href="cv.pdf" download>🌮 Download CV</a>
-      </div>
-    </section>
-
-    <!-- ---- 04 Del día (Timeline) ---- -->
-    <section class="course reveal" id="timeline">
-      <div class="course-head">
-        <span class="num">05</span>
-        <h3>Timeline <em>· today's orders</em></h3>
-        <span class="tag">recent activity</span>
-      </div>
-      <div class="orders">
-        <div class="order">
-          <div class="when">AUGUST 2026 · PRESENT</div>
-          <h4>Analyst, Software Engineering · BlackRock</h4>
-          <p>Full-stack development for Aladdin, BlackRock's investment platform.</p>
-        </div>
-        <div class="order">
-          <div class="when">JUNE 2026</div>
-          <h4>Publication accepted at CLEF</h4>
-          <p>Contributed to a CLEF paper on natural language processing and information retrieval, written together with collaborators.</p>
-        </div>
-        <div class="order">
-          <div class="when">JUNE 2026</div>
-          <h4>Paper accepted at ICPR 2026</h4>
-          <p>An extended version of the Bluebird project, with additional experiments and analyses, was accepted at the International Conference on Pattern Recognition (ICPR 2026).</p>
-        </div>
-        <div class="order">
-          <div class="when">JUNE 2026</div>
-          <h4>Accepted to the CVPR LatinX Workshop</h4>
-          <p>With “Towards Benchmarking the Bluebird in the Wild,” a work focused on evaluating and benchmarking AI systems in the real world.</p>
-        </div>
-        <div class="order">
-          <div class="when">2025</div>
-          <h4>Completed my Computer Science degree · UNAM</h4>
-          <p>Finished my undergraduate studies in Computer Science at the National Autonomous University of Mexico.</p>
-        </div>
-        <div class="order">
-          <div class="when">JUNE TO AUGUST 2025</div>
-          <h4>Research Intern · National University of Singapore (NUS)</h4>
-          <p>Conducted extensive NLP research on political discourse using embeddings from transformer models, clustering algorithms, and representation learning techniques.</p>
-        </div>
-        <div class="order">
-          <div class="when">2024 TO 2025</div>
-          <h4>Software Cybersecurity Engineer · Honeywell</h4>
-          <p>Developed automation and cybersecurity solutions for industrial and aerospace applications.</p>
-        </div>
-        <div class="order">
-          <div class="when">2024</div>
-          <h4>AI Internship in Japan · METI Program (AWL Inc.)</h4>
-          <p>Completed an internship focused on AI through the METI Government Internship Program, developing performance analysis and monitoring tools for edge AI systems at AWL Inc.</p>
+    <div id="allList"></div>
+    <div class="all-item contact-block" id="contact">
+      <div class="all-ch">CONTACT</div>
+      <div class="all-body">
+        <h3>Contact</h3>
+        <div class="contact">
+          <span class="addr">monse_arriaga@ciencias.unam.mx</span>
+          <a href="https://github.com/monse-arriaga" target="_blank" rel="noopener">github.com/monse-arriaga</a>
+          <a href="https://orcid.org/0009-0006-5458-2546" target="_blank" rel="noopener">orcid.org/0009-0006-5458-2546</a>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
+  <p class="foot">© 2026 Estela Monserrat Arriaga Santana (Monse Arriaga)</p>
 
-    <!-- ---- 05 La cuenta (Contact) ---- -->
-    <section class="course reveal" id="contact">
-      <div class="course-head">
-        <span class="num">06</span>
-        <h3>Contact <em>· the bill</em></h3>
-      </div>
-      <div class="contact-links">
-        <a href="mailto:monse_arriaga@ciencias.unam.mx">monse_arriaga@ciencias.unam.mx</a>
-        <a href="https://github.com/monse-arriaga" target="_blank" rel="noopener">github.com/monse-arriaga</a>
-        <a href="https://orcid.org/0009-0006-5458-2546" target="_blank" rel="noopener">orcid.org/0009-0006-5458-2546</a>
-      </div>
-      <div class="foot">© 2026 Monse Arriaga · Made with 🐭 and 🌮 on GitHub Pages</div>
-    </section>
-
-  </div>
-</main>
+</div>
+</div>
 
 <script>
 (function(){
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const progs  = Array.from(document.querySelectorAll('.prog'));
+  const N = progs.length;                       // channels 0..9
+  const screen = document.getElementById('screen'), v = document.getElementById('v'),
+        img = document.getElementById('img'), card = document.getElementById('card'),
+        osd = document.getElementById('osd'), now = document.getElementById('now'),
+        hand = document.getElementById('hand');
+  const remoteBtns = Array.from(document.querySelectorAll('.remote [data-ch]'));
+  const guideLinks = Array.from(document.querySelectorAll('#guide a'));
+  const root = document.documentElement;
+  let ch = 0, osdTimer = null, handTimers = [], first = true;
 
-  /* ---------- 0) la tele: videos en bucle, uno tras otro ---------- */
-  // Pon tus archivos en una carpeta videos/ junto al index.html y lista aquí cada uno.
-  // Formatos que corren en todos los navegadores: .mp4 (H.264) o .webm. Muted para que el autoplay funcione.
-  const PLAYLIST = [
-    { img:'videos/bluebird.jpg', seconds:9,  title:'Bluebird in the Wild' },   // foto: se muestra 'seconds' y pasa al siguiente
-    { src:'videos/slow-motion.mp4',          title:'Worlds in Slow Motion' },
-    { src:'videos/keeping-time.mp4',         title:'Keeping time' },
-  ];
-  const tv = document.getElementById('tv'), tvVideo = document.getElementById('tvVideo'),
-        tvImg = document.getElementById('tvImg'), tvLabel = document.getElementById('tvLabel');
-  let channel = -1, failed = 0, photoTimer = null;
-  function tune(i){
-    if(!PLAYLIST.length){ tv.classList.add('nosignal'); return; }
-    clearTimeout(photoTimer);
-    channel = (i + PLAYLIST.length) % PLAYLIST.length;
-    const v = PLAYLIST[channel];
-    tv.classList.remove('nosignal');
-    tvLabel.textContent = v.title || '';
-    if(v.img){
-      tv.classList.add('photo');
-      tvVideo.pause(); tvVideo.removeAttribute('src');
-      tvImg.src = v.img;
-      photoTimer = setTimeout(()=> tune(channel + 1), (v.seconds || 8) * 1000);
-    } else {
-      tv.classList.remove('photo');
-      tvVideo.src = v.src;
-      tvVideo.play().catch(()=>{});
+  /* the hand comes in, presses, and the screen blinks to the new channel */
+  function blink(){
+    if(reduce) return;
+    screen.classList.add('blink');
+    requestAnimationFrame(() => requestAnimationFrame(() => screen.classList.remove('blink')));
+  }
+  function withHand(fn){
+    handTimers.forEach(clearTimeout); handTimers = [];
+    if(reduce || first){ first = false; fn(); return; }
+    hand.classList.add('in'); hand.classList.remove('press');
+    handTimers.push(setTimeout(() => { hand.classList.add('press'); fn(); }, 300));
+    handTimers.push(setTimeout(() => hand.classList.remove('press'), 520));
+    handTimers.push(setTimeout(() => hand.classList.remove('in'), 1250));
+  }
+
+  function pad(n){ return String(n).padStart(2, '0'); }
+
+  function tune(n, opts){
+    n = ((n % N) + N) % N;
+    ch = n;
+    remoteBtns.forEach(b => b.classList.toggle('on', +b.dataset.ch === n));
+    withHand(() => show(n, opts));
+  }
+
+  function show(n, opts){
+    const p = progs[n];
+    blink();
+
+    const [kind, ...rest] = p.dataset.media.split(':');
+    const val = rest.join(':');
+    const small = kind === 'video-small';
+    const isVideo = kind === 'video' || small;
+    v.classList.toggle('small', small); screen.classList.toggle('framed', small);
+    v.hidden = !isVideo; img.hidden = kind !== 'img'; card.hidden = kind !== 'card';
+    if(isVideo){ if(v.getAttribute('src') !== val) v.src = val; v.play().catch(()=>{}); } else { v.pause(); }
+    if(kind === 'img'){ img.src = val; img.className = 'photo'; }
+    if(kind === 'card'){
+      const [style, big, small] = val.split('|');
+      card.className = 'card ' + (style === 'bars' ? 'bars' : '');
+      card.innerHTML = (style === 'pet' ? '<img class="pet" src="chinchilla.png" alt="">' : '') + '<div class="big"></div><div class="small"></div>';
+      card.querySelector('.big').textContent = big || '';
+      card.querySelector('.small').textContent = small || '';
+    }
+
+    progs.forEach(x => x.hidden = x !== p);
+    if(!reduce){ p.style.animation = 'none'; void p.offsetWidth; p.style.animation = ''; }
+
+    root.style.setProperty('--tint', p.dataset.tint);
+    osd.querySelector('b').textContent = n;
+    osd.querySelector('span').textContent = p.dataset.name;
+    screen.classList.add('osd-on'); clearTimeout(osdTimer);
+    osdTimer = setTimeout(() => screen.classList.remove('osd-on'), 2600);
+    now.textContent = 'NOW ON CH ' + pad(n);
+
+    guideLinks.forEach(a => a.classList.toggle('on', +a.dataset.ch === n));
+
+    if(!opts || !opts.silentHash){
+      history.replaceState(null, '', n ? '#ch' + n : location.pathname + location.search);
     }
   }
-  tvVideo.addEventListener('ended', ()=> tune(channel + 1));
-  tvVideo.addEventListener('error', ()=>{
-    if(!tvVideo.getAttribute('src')) return;
-    failed++;
-    if(failed >= PLAYLIST.length){ tv.classList.add('nosignal'); tvLabel.textContent=''; return; }
-    tune(channel + 1);
-  });
-  tvImg.addEventListener('error', ()=>{ failed++; if(failed < PLAYLIST.length) tune(channel + 1); });
-  tvVideo.addEventListener('playing', ()=>{ failed = 0; });
-  tvImg.addEventListener('load', ()=>{ failed = 0; });
-  tv.addEventListener('click', ()=> tune(channel + 1));
-  tune(0);
-  // botones "Watch on the TV" en el menú especial
-  document.querySelectorAll('[data-channel]').forEach(b=>{
-    b.addEventListener('click', e=>{
-      e.preventDefault();
-      tune(parseInt(b.dataset.channel, 10));
-      document.getElementById('home').scrollIntoView({behavior: reduce?'auto':'smooth'});
-    });
+
+  remoteBtns.forEach(b => b.addEventListener('click', () => tune(+b.dataset.ch)));
+  document.getElementById('chUp').addEventListener('click', () => tune(ch + 1));
+  document.getElementById('chDown').addEventListener('click', () => tune(ch - 1));
+
+  /* hovering a button on the remote says what it does */
+  const how = document.getElementById('how'), howDefault = how.innerHTML;
+  document.querySelectorAll('.remote button, .viewer').forEach(b => {
+    const name = b.dataset.ch ? b.dataset.ch + ' · ' + progs[+b.dataset.ch].dataset.name : b.getAttribute('aria-label');
+    b.title = name;
+    const say = () => { how.innerHTML = '<b></b>'; how.firstChild.textContent = name; };
+    b.addEventListener('mouseenter', say); b.addEventListener('focus', say);
+    b.addEventListener('mouseleave', () => how.innerHTML = howDefault);
+    b.addEventListener('blur', () => how.innerHTML = howDefault);
   });
 
-  /* ---------- 1) la chinchilla se asoma por el puesto ---------- */
-  // Cada "agujero": x,y = esquina inferior-centro del agujero en % del dibujo; w = ancho en % del dibujo.
-  // Como el .hole tiene overflow:hidden, ella sube desde abajo del borde y parece salir de atrás de algo.
-  const SPOTS = [
-    { x:59, y:53,  w:15, flip:false }, // detrás del mostrador, en medio
-    { x:31, y:49,  w:12, flip:true  }, // al lado del trompo
-    { x:77, y:42,  w:14, flip:false }, // dentro de la tele
-    { x:24, y:62,  w:14, flip:false }, // arriba del banco verde
-    { x:94, y:52,  w:14, flip:true  }, // esquina derecha del mostrador
-    { x:96, y:97,  w:14, flip:false }, // debajo del puesto, abajo a la derecha
-    { x:12, y:94,  w:14, flip:true  }, // debajo del puesto, abajo a la izquierda
-    { x:74, y:53,  w:12, flip:false }, // frente a la tele, detrás del mostrador
-    { x:3, y:21,  w:9,  flip:true  }, // esquina vacía del letrero, antes de la T
-    { x:3, y:60,  w:11,  flip:false }, // en la orilla izquierda del mostrador
-  ];
-  const stand = document.getElementById('stand');
-  const hole  = document.getElementById('hole');
-  const chin  = document.getElementById('chin');
-  const CHIN_RATIO = 483/678;           // alto/ancho del png
-  let current = -1, timer = null;
-
-  function placeHole(i){
-    const s = SPOTS[i];
-    const W = stand.clientWidth, H = stand.clientHeight;
-    const scale = window.innerWidth <= 700 ? 1.6 : 1;   // más grande en celular para poder atraparla
-    const w = W * s.w/100 * scale, h = w * CHIN_RATIO;
-    hole.style.width  = w + 'px';
-    hole.style.height = h + 'px';
-    hole.style.left   = (W * s.x/100) + 'px';
-    hole.style.top    = (H * s.y/100 - h) + 'px';
-    hole.classList.toggle('flip', !!s.flip);
-  }
-  function nextSpot(){
-    let i; do { i = Math.floor(Math.random()*SPOTS.length); } while(i === current && SPOTS.length > 1);
-    return i;
-  }
-  function popUp(){
-    current = nextSpot();
-    placeHole(current);
-    hole.classList.remove('down');
-    requestAnimationFrame(()=> requestAnimationFrame(()=> hole.classList.add('up')));
-    timer = setTimeout(popDown, 2300 + Math.random()*1800);
-  }
-  function popDown(){
-    hole.classList.add('down');
-    hole.classList.remove('up');
-    timer = setTimeout(popUp, 500 + Math.random()*900);
-  }
-  if(reduce){
-    current = 0; placeHole(0); hole.classList.add('up');
-  } else {
-    setTimeout(popUp, 700);
-  }
-  window.addEventListener('resize', ()=>{ if(current>=0) placeHole(current); });
-
-  /* ---------- 2) darle un taco cuando la atrapas ---------- */
-  const fedCount = document.getElementById('fedCount');
-  const fedBox   = document.getElementById('fed');
-  let fed = 0, busy = false;
-
-  chin.addEventListener('click', ()=>{
-    if(busy || !hole.classList.contains('up')) return;
-    busy = true;
-    clearTimeout(timer);                      // se queda a comer
-
-    const from = fedBox.getBoundingClientRect();
-    const to   = chin.getBoundingClientRect();
-    const sx = from.left + from.width/2, sy = from.top + from.height/2;
-    const ex = to.left + to.width/2,     ey = to.top + to.height*0.6;
-
-    const taco = document.createElement('div');
-    taco.className = 'fly'; taco.textContent = '🌮';
-    taco.style.left = (sx-13)+'px'; taco.style.top = (sy-13)+'px';
-    document.body.appendChild(taco);
-    requestAnimationFrame(()=>{ taco.style.transform = 'translate('+(ex-sx)+'px,'+(ey-sy)+'px) rotate(360deg)'; });
-
-    setTimeout(()=>{
-      taco.style.opacity = '0'; setTimeout(()=> taco.remove(), 200);
-      if(!reduce){
-        hole.classList.add('nom');
-        setTimeout(()=> hole.classList.remove('nom'), 520);
-        for(let i=0;i<4;i++){
-          const h = document.createElement('div');
-          h.className = 'pop'; h.textContent = ['💗','🌮','💗','✨'][i];
-          h.style.left = (ex-9 + (Math.random()*36-18))+'px';
-          h.style.top  = (ey-20)+'px';
-          h.style.animationDelay = (i*0.08)+'s';
-          document.body.appendChild(h);
-          setTimeout(()=> h.remove(), 1300 + i*80);
-        }
-      }
-      fed++; fedCount.textContent = fed;
-      busy = false;
-      timer = setTimeout(popDown, reduce ? 999999 : 900);
-    }, 550);
+  const viewer = document.getElementById('viewer');
+  viewer.addEventListener('click', () => {
+    viewer.classList.add('press'); setTimeout(() => viewer.classList.remove('press'), 160);
+    tune(ch + 1);
   });
 
-  /* ---------- 3) links de la pizarra ---------- */
-  document.querySelectorAll('a[href^="#"]').forEach(a=>{
-    a.addEventListener('click', e=>{
-      const t = document.querySelector(a.getAttribute('href'));
-      if(t){ e.preventDefault(); t.scrollIntoView({behavior: reduce?'auto':'smooth', block:'start'}); history.replaceState(null,'',a.getAttribute('href')); }
-    });
+  guideLinks.forEach(a => a.addEventListener('click', e => {
+    e.preventDefault(); tune(+a.dataset.ch);
+    document.querySelector('.stage').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block:'start' });
+  }));
+
+  addEventListener('keydown', e => {
+    if(e.target.closest('input, textarea')) return;
+    if(e.key === 'ArrowRight' || e.key === 'ArrowUp'){ e.preventDefault(); tune(ch + 1); }
+    else if(e.key === 'ArrowLeft' || e.key === 'ArrowDown'){ e.preventDefault(); tune(ch - 1); }
+    else if(/^[0-9]$/.test(e.key)){ tune(+e.key); }
   });
 
-  /* ---------- 4) reveal al hacer scroll ---------- */
-  const revealer = new IntersectionObserver(entries=>{
-    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); revealer.unobserve(e.target); } });
-  }, { threshold:0.1 });
-  document.querySelectorAll('.reveal').forEach(el=> revealer.observe(el));
+
+  /* everything on one page: a copy of each channel, in order */
+  const allList = document.getElementById('allList');
+  progs.forEach((p, i) => {
+    if(i === 0) return;
+    const item = document.createElement('div');
+    item.className = 'all-item';
+    item.style.setProperty('--k', p.dataset.tint);
+    const body = p.cloneNode(true);
+    body.removeAttribute('hidden'); body.className = 'all-body'; body.removeAttribute('data-ch');
+    body.style.animation = 'none';
+    item.innerHTML = '<div class="all-ch">CH ' + pad(i) + '</div>';
+    item.appendChild(body);
+    allList.appendChild(item);
+  });
+  document.querySelectorAll('a[href="#all"]').forEach(a => a.addEventListener('click', e => {
+    e.preventDefault();
+    document.getElementById('all').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block:'start' });
+  }));
+
+  function fromHash(){
+    const m = /^#ch(\d)$/.exec(location.hash);
+    tune(m ? +m[1] : 0, { silentHash:true });
+  }
+  addEventListener('hashchange', fromHash);
+  fromHash();
 })();
 </script>
 </body>
